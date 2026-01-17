@@ -9,7 +9,6 @@ import {columns} from "@/components/ui/beneficiaries/table/columns";
 import County from "@/lib/types/county";
 import {useRouter, useSearchParams} from "next/navigation";
 import {InfoIcon} from "lucide-react";
-import {toast} from "sonner";
 
 export default function BeneficiariesClient({counties, isAdmin}: {
     counties: County[];

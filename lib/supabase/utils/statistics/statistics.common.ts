@@ -20,7 +20,7 @@ export async function fetchStatistics(
 
     if (error) {
         return [];
-    }A
+    }
 
     return data as FinancialProgressChartItem[] || [];
 }

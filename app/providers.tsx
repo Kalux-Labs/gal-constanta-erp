@@ -5,7 +5,6 @@ import {
     QueryClient,
     QueryClientProvider,
 } from '@tanstack/react-query';
-import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 import {AccessibilityProvider} from "@/components/accessibility/accessibility-provider";
 import {AccessibilityWidget} from "@/components/accessibility/accessibility-widget";
 
@@ -23,7 +22,6 @@ export function Providers({children}: ProvidersProps) {
                 {children}
                 <AccessibilityWidget/>
             </AccessibilityProvider>
-            {/*<ReactQueryDevtools initialIsOpen={false}/>*/}
         </QueryClientProvider>
     );
 }
