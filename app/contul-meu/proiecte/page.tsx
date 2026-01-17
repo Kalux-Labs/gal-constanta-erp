@@ -23,8 +23,8 @@ export default async function Projects() {
     })
 
     const breadcrumbsItems = [
-        {href: '/my-account', title: 'Contul meu'},
-        {href: '/my-account/projects', title: 'Proiecte mele'}
+        {href: '/contul-meu', title: 'Contul meu'},
+        {href: '/contul-meu/proiecte', title: 'Proiecte mele'}
     ]
 
     return (
@@ -32,7 +32,7 @@ export default async function Projects() {
             <BreadcrumbComponent items={breadcrumbsItems}/>
             <div>
                 <h1 className="font-medium text-2xl">Proiectele mele</h1>
-                <p className="text-muted-foreground">Administreaza proiectele pe care le desfășori.</p>
+                <p className="text-muted-foreground">Administrează proiectele pe care le desfășori.</p>
             </div>
             <ProjectsClient counties={counties} cities={cities}/>
         </div>

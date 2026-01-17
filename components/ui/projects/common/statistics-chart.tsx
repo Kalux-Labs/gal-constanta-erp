@@ -115,7 +115,7 @@ export default function StatisticsChart({
     }
 
     return (
-        <Card className="shadow-none py-6">
+        <Card className="shadow-none py-4">
             <CardHeader className="flex flex-col px-4">
                 <div className="flex flex-col md:flex-row items-start justify-between w-full gap-2">
                     <div className="flex flex-col gap-2">

@@ -6,6 +6,7 @@ import {getRecurrencyOption} from "@/lib/utils";
 import {Task} from "@/lib/types/task";
 import {taskSchema} from "@/lib/validation/schemas/task-schema";
 import {requireAdmin, requireAuth, validateBody} from "@/lib/server/api/utils";
+import {downloadTaskSchema} from "@/lib/validation/schemas/download-task-schema";
 
 export async function GET(request: NextRequest) {
     try {
@@ -99,5 +100,56 @@ export async function POST(request: NextRequest) {
             {error: "Eroare internă a serverului"},
             {status: 500}
         )
+    }
+}
+
+export async function DELETE(request: NextRequest) {
+    try {
+        const auth = await requireAdmin();
+        if (auth.error) {
+            return auth.error;
+        }
+
+        const validation = await validateBody(request, downloadTaskSchema);
+
+        if (validation.error) {
+            return validation.error;
+        }
+
+        const {supabase} = auth;
+        const {export_year, quarters} = validation.data!;
+
+        const {data, error} = await supabase
+            .from("tasks")
+            .delete()
+            .eq("year", export_year)
+            .eq("quarter", quarters)
+            .select();
+
+        if (error) {
+            console.error(error);
+            return NextResponse.json(
+                {error: "Nu s-au putut șterge activitățile"},
+                {status: 403}
+            )
+        }
+
+        if (!data) {
+            return NextResponse.json(
+                {error: "Nu s-au putut șterge activitățile"},
+                {status: 404}
+            )
+        }
+
+        return NextResponse.json(
+            {error: "Activitățile au fost șterse cu succes"},
+            {status: 200}
+        );
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json(
+            {error: "Eroare internă a serverului"},
+            {status: 500}
+        );
     }
 }

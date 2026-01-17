@@ -1,4 +1,4 @@
 export const CONSTANTS = {
-    PRODUCT_NAME: process.env.NEXT_PUBLIC_PRODUCT_NAME,
-    PRODUCT_DESCRIPTION: process.env.NEXT_PUBLIC_PRODUCT_DESCRIPTION,
+    PRODUCT_NAME: "GAL Constanța Centru",
+    PRODUCT_DESCRIPTION: "Platforma Grupului de Acțiune Locală Constanța Centru - Portal dedicat sprijinului și dezvoltării proiectelor de investiții în comunitatea noastră locală.",
 }

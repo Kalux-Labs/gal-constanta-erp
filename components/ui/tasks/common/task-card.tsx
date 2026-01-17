@@ -22,7 +22,6 @@ import {motion} from "motion/react";
 import {useMobile} from "@/hooks/use-mobile";
 import {useDeleteTask} from "@/lib/hooks/tasks/use-delete-task";
 import {useConfirmDialog} from "@/lib/hooks/use-confirm-dialog";
-import {toast} from "sonner";
 import ConfirmDialog from "@/components/dialogs/confirm-dialog";
 import {useUpdateTask} from "@/lib/hooks/tasks/use-update-task";
 
@@ -218,15 +217,7 @@ function TaskContextMenu({task, children}: { task: Task, children: React.ReactNo
     };
 
     const handleUpdateClick = async () => {
-        updateTask({...task, done: !task.done}, {
-            onSuccess: () => {
-
-            },
-            onError: () => {
-                toast.error("Eroare la actualizarea activității!");
-            },
-
-        })
+        updateTask({...task, done: !task.done})
     }
 
 
@@ -282,12 +273,12 @@ function TaskContextMenu({task, children}: { task: Task, children: React.ReactNo
                     <ContextMenuItem onClick={handleUpdateClick}>
                         {task.done ? (
                             <>
-                                <CircleMinus className="w-4 h-4 mr-2"/>
+                                <CircleMinus/>
                                 Redeschide
                             </>
                         ) : (
                             <>
-                                <CheckCircle2 className="w-4 h-4 mr-2 text-green-600"/>
+                                <CheckCircle2 className="text-green-600"/>
                                 Finalizează
                             </>
                         )}
@@ -295,21 +286,21 @@ function TaskContextMenu({task, children}: { task: Task, children: React.ReactNo
 
                     <ContextMenuSeparator/>
                     <ContextMenuItem onClick={() => openTaskSheet(task)}>
-                        <Pencil className="w-4 h-4 mr-2"/>
+                        <Pencil/>
                         Editează
                     </ContextMenuItem>
                     {!task.parent_id && (
                         <ContextMenuItem onClick={() => {
                             openTaskSheet(undefined, {parentId: task.id, year: task.year, quarter: task.quarter});
                         }}>
-                            <PlusCircle className="w-4 h-4 mr-2"/>
+                            <PlusCircle/>
                             Activitate secundară
                         </ContextMenuItem>
                     )}
 
                     <ContextMenuSeparator/>
                     <ContextMenuItem onClick={handleDeleteClick} variant="destructive">
-                        <Trash2 className="w-4 h-4 mr-2"/>
+                        <Trash2/>
                         Șterge
                     </ContextMenuItem>
 

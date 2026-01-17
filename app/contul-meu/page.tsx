@@ -34,13 +34,13 @@ export default async function MyAccount() {
                     actions={[
                         {
                             label: "Adaugă un nou proiect",
-                            href: "/my-account/projects?new=1",
+                            href: "/contul-meu/proiecte?nou=1",
                             variant: "default",
                             icon: "plus"
                         },
                         {
                             label: "Adaugă un nou beneficiar",
-                            href: "/my-account/beneficiaries?new=1",
+                            href: "/contul-meu/beneficiari?nou=1",
                             variant: "default",
                             icon: "plus"
                         },
@@ -49,7 +49,7 @@ export default async function MyAccount() {
                     title={projectsDisplayedTitle}
                     description="Administrare proiecte"
                     body="Vizualizează, organizează și gestionează toate proiectele tale într-un singur loc."
-                    href="/my-account/projects"
+                    href="/contul-meu/proiecte"
                     actionLabel={projectsActionLabel}
                     icon={FolderOpen}
                 />
@@ -57,7 +57,7 @@ export default async function MyAccount() {
                     title="Beneficiari"
                     description="Administrare beneficiari"
                     body="Accesează și gestionează rapid informațiile beneficiarilor pe care îi reprezinți."
-                    href="/my-account/beneficiaries"
+                    href="/contul-meu/beneficiari"
                     actionLabel="Către beneficiari"
                     icon={UsersIcon}
                 />
@@ -66,7 +66,7 @@ export default async function MyAccount() {
                         title="Planificator"
                         description="Administrează planificările și alertele"
                         body="Accesează și gestionează rapid informațiile despre planificări și alertele acestora."
-                        href="/protected"
+                        href="/planificator"
                         actionLabel="Către planificator"
                         icon={CalendarCheck}
                     />

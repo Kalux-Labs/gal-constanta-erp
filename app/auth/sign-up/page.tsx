@@ -7,7 +7,7 @@ export default async function Page() {
 
     const {data} = await supabase.auth.getClaims();
     if (data?.claims) {
-        redirect('/my-account');
+        redirect('/contul-meu');
     }
 
     return (

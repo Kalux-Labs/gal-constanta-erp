@@ -36,7 +36,7 @@ export default function Header() {
                 <NavigationMenu viewport={false} className="hidden md:flex gap-4 z-20">
                     <ModeToggle/>
                     <Button asChild>
-                        <Link href="/my-account">
+                        <Link href="/contul-meu">
                             <UserIcon/>
                             Contul meu</Link>
                     </Button>
@@ -60,7 +60,7 @@ export default function Header() {
                             </SheetHeader>
                             <div className="grid flex-1 auto-rows-min px-4">
                                 <Button asChild>
-                                    <Link href="/my-account" onClick={() => setOpen(false)}>
+                                    <Link href="/contul-meu" onClick={() => setOpen(false)}>
                                         <UserIcon/>
                                         Contul meu</Link>
                                 </Button>

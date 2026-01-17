@@ -49,7 +49,7 @@ export function LoginForm({className, ...props}: React.ComponentPropsWithoutRef<
                 throw error;
             }
 
-            router.push('/my-account')
+            router.push('/contul-meu')
         } catch(error: unknown) {
             console.error(error);
             form.setError("email", {

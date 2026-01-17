@@ -9,10 +9,26 @@ import {useTasks} from "@/lib/hooks/tasks/use-tasks";
 import FormField from "@/components/forms/form-field";
 import {FormCombobox} from "@/components/forms/form-combobox";
 import {Button} from "@/components/ui/button";
-import {Loader2, Plus} from "lucide-react";
+import {
+    DownloadIcon,
+    Loader2,
+    MoreHorizontalIcon,
+    Plus, Trash2
+} from "lucide-react";
 import {taskQuerySchema} from "@/lib/validation/schemas/tasks-query-schema";
 import {useTaskSheet} from "@/lib/hooks/tasks/use-task-sheet";
-import {getCurrentYear, quarterOptionsLiterals} from "@/lib/utils";
+import {getCurrentQuarter, getCurrentYear, quarterOptionsLiterals} from "@/lib/utils";
+import {ButtonGroup} from "@/components/ui/button-group";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem, DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import React from "react";
+import ExportTasksDialog from "@/components/ui/tasks/client/export-tasks-dialog";
+import DeleteTasksDialog from "@/components/ui/tasks/client/delete-tasks-dialog";
 
 type DoneOption = {
     value: "all" | "true" | "false";
@@ -26,15 +42,6 @@ const doneOptions: DoneOption[] = [
 ];
 
 type FormValues = z.infer<typeof taskQuerySchema>;
-
-// Helper function to get current quarter
-function getCurrentQuarter(): 1 | 2 | 3 | 4 {
-    const month = new Date().getMonth() + 1; // getMonth() returns 0-11
-    if (month <= 3) return 1;
-    if (month <= 6) return 2;
-    if (month <= 9) return 3;
-    return 4;
-}
 
 export default function TasksClient() {
     const {openTaskSheet} = useTaskSheet();
@@ -88,7 +95,7 @@ export default function TasksClient() {
                                 <FormCombobox
                                     name="year"
                                     placeholder="Selectează anul"
-                                    options={[2024,2025,2026,2027]}
+                                    options={[2024, 2025, 2026, 2027]}
                                     getId={(item) => item}
                                     getLabel={(item) => String(item)}
                                     searchPlaceholder="Caută anul..."
@@ -96,13 +103,41 @@ export default function TasksClient() {
                                 />
                             </div>
                         </div>
-                        <Button
-                            type="button"
-                            className="w-full md:w-auto" onClick={() => openTaskSheet()}>
-                            <Plus/>
-                            <span className="inline md:hidden lg:inline">Adaugă activitate</span>
-                            <span className="hidden md:inline lg:hidden">Adaugă</span>
-                        </Button>
+                        <ButtonGroup className="w-full md:w-auto gap-4 sm:gap-0">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                className="flex-1" onClick={() => openTaskSheet()}>
+                                <Plus/>
+                                <span className="inline md:hidden lg:inline">Adaugă activitate</span>
+                                <span className="hidden md:inline lg:hidden">Adaugă</span>
+                            </Button>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button type="button" variant="outline" size="icon" aria-label="Mai multe opțiuni">
+                                        <MoreHorizontalIcon/>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="w-44" align="end">
+                                    <DropdownMenuGroup>
+                                        <ExportTasksDialog>
+                                            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                                                <DownloadIcon/>
+                                                Descarcă raport
+                                            </DropdownMenuItem>
+                                        </ExportTasksDialog>
+                                        <DropdownMenuSeparator/>
+                                        <DeleteTasksDialog>
+                                            <DropdownMenuItem variant="destructive"
+                                                              onSelect={(e) => e.preventDefault()}>
+                                                <Trash2/>
+                                                Ștergere avansată
+                                            </DropdownMenuItem>
+                                        </DeleteTasksDialog>
+                                    </DropdownMenuGroup>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </ButtonGroup>
                     </form>
                 </FormProvider>
 
@@ -129,13 +164,13 @@ export default function TasksClient() {
                         <TabsContent key={q} value={q.toString()} className="flex flex-col gap-4">
                             {isPending && isFetching && (
                                 <div className="w-full flex flex-row justify-center items-center animate-spin">
-                                    <Loader2 />
+                                    <Loader2/>
                                 </div>
                             )}
 
                             {!isPending && data && data.length > 0 && (
                                 data.map((task) => (
-                                    <TaskCard key={task.id} task={task} />
+                                    <TaskCard key={task.id} task={task}/>
                                 ))
                             )}
 

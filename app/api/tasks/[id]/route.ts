@@ -96,13 +96,13 @@ export async function DELETE(
 
         if (!data) {
             return NextResponse.json(
-                {message: "Nu s-a putut șterge activitatea"},
+                {error: "Nu s-a putut șterge activitatea"},
                 {status: 404}
             )
         }
 
         return NextResponse.json(
-            {message: "Activitatea a fost ștearsă cu succes"},
+            {error: "Activitatea a fost ștearsă cu succes"},
             {status: 200}
         );
     } catch (error) {

@@ -33,6 +33,7 @@ type FormFieldProps<TFieldValues extends FieldValues> = {
     onValueChange?: (value: string) => void;
     min?: number;
     max?: number;
+    inputMode?: 'text' | 'numeric' | 'decimal' | 'tel' | 'search' | 'email' | 'url';
 };
 
 export default function FormField<TFieldValues extends FieldValues>({
@@ -52,7 +53,8 @@ export default function FormField<TFieldValues extends FieldValues>({
                                                                         readOnly,
                                                                         onValueChange,
                                                                         min,
-                                                                        max
+                                                                        max,
+                                                                        inputMode
                                                                     }: FormFieldProps<TFieldValues>) {
     const {control} = useFormContext<TFieldValues>();
     return (
@@ -125,7 +127,25 @@ export default function FormField<TFieldValues extends FieldValues>({
                             min={min}
                             max={max}
                             value={field.value ?? ""}
-                            onChange={(e) => handleChange(e.target.value)}
+                            inputMode={type === 'number' ? 'numeric' : inputMode}
+                            pattern={type === 'number' ? '[0-9]' : undefined}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                if (type === 'number') {
+                                    const numeric = Number(value);
+
+                                    if (!Number.isNaN(numeric)) {
+                                        if (min != undefined && numeric < min) {
+                                            return;
+                                        }
+                                        if (max != undefined && numeric > max) {
+                                            return;
+                                        }
+                                    }
+                                }
+
+                                handleChange(value);
+                            }}
                         />
                     )}
                     {fieldState.error && !hidden && showError && (

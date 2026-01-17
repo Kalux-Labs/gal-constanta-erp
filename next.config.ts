@@ -1,11 +1,15 @@
 import {NextConfig} from 'next';
-import createNextIntlPlugin from 'next-intl/plugin';
+import createMDX from '@next/mdx'
+
+const withMDX = createMDX({
+    extension: /\.mdx?$/,
+});
 
 const nextConfig: NextConfig = {
     eslint: {
         dirs: ['app', 'components', 'lib']
-    }
+    },
+    pageExtensions: ['mdx', 'ts', 'tsx'],
 };
 
-const withNextIntl = createNextIntlPlugin();
-export default withNextIntl(nextConfig);
+export default withMDX(nextConfig);

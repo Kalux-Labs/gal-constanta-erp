@@ -16,7 +16,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Button} from "@/components/ui/button";
 import FormDateTimePicker from "@/components/forms/form-date-time-picker";
 import FormField from "@/components/forms/form-field";
-import {useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import useCreateFinancialRecord from "@/lib/hooks/financial-record/use-create-financial-record";
 import {toast} from "sonner";
@@ -42,14 +42,16 @@ export default function CreateFinancialRecordSheet({
 
     const {mutate, isPending} = useCreateFinancialRecord();
 
+    const getDefaultValues = useCallback(() => ({
+        project_id: project.id,
+        installments: [
+            {date: new Date().toISOString(), total_amount: 0, total_financial_help: 0}
+        ]
+    }), [project]);
+
     const form = useForm<FinancialRecordFormData>({
         resolver: zodResolver(financialRecordSchema),
-        defaultValues: {
-            project_id: project.id,
-            installments: [
-                {date: new Date().toISOString(), total_amount: 0, total_financial_help: 0} // ensure at least 1 field initially
-            ]
-        }
+        defaultValues: getDefaultValues()
     });
 
     const {control} = form;
@@ -59,7 +61,7 @@ export default function CreateFinancialRecordSheet({
     });
 
     const canAdd = fields.length < 10;
-    const canRemove = fields.length > 1;
+    const canRemove = (index: number) => fields.length > 1 && index !== 0;
 
     const onSubmit = (data: FinancialRecordFormData) => {
         const total_financial_records_amount = [...data.installments].reduce((acc, item) => acc + item.total_amount, 0);
@@ -79,10 +81,18 @@ export default function CreateFinancialRecordSheet({
 
     const handleSubmitClick = async () => {
         const isValid = await form.trigger();
+        console.log(form.formState.errors);
         if (isValid) {
+            console.log(form.getValues());
             await form.handleSubmit(onSubmit)();
         }
     }
+
+    useEffect(() => {
+        if (open && project) {
+            form.reset(getDefaultValues())
+        }
+    }, [project, open, form, getDefaultValues]);
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
@@ -105,51 +115,55 @@ export default function CreateFinancialRecordSheet({
                         <p className="text-sm font-medium">Tip declarație: {financialRecordType}</p>
                         <p className="text-sm font-medium">Valoare totală
                             eligibilă: {project.total_eligible_financing_amount}</p>
-                        {fields.map((field, index) => (
-                            <Card key={field.id} className="shadow-xs py-4 px-4">
-                                <CardHeader className="text-md font-medium px-0">
-                                    <CardTitle>Tranșa {index + 1}</CardTitle>
-                                    <CardDescription></CardDescription>
-                                </CardHeader>
-                                <CardContent className="px-0 grid flex-1 auto-rows-min gap-4">
-                                    <FormDateTimePicker
-                                        name={`installments.${index}.date`}
-                                        label="Data"
-                                        required
-                                        disabled={isPending}
-                                    />
-                                    <FormField name={`installments.${index}.total_amount`}
-                                               label="Valoare totală"
-                                               placeholder="Introduceți valoarea"
-                                               required
-                                               type="number"
-                                               min={0}
-                                               max={1000000000}
-                                               disabled={isPending}
-                                    />
-                                    <FormField name={`installments.${index}.total_financial_help`}
-                                               label="Valoare ajutor financiar nerambursabil"
-                                               placeholder="Introduceți valoarea"
-                                               required
-                                               type="number"
-                                               min={0}
-                                               max={1000000000}
-                                               disabled={isPending}
-                                    />
+                        {fields.map((field, index) => {
+                                const cardTitle = index == 0 ? `Avans` : `Tranșa ${index}`;
 
-                                    {canRemove && (
-                                        <Button
-                                            variant="dashed"
-                                            className="text-red-500 border-red-300 hover:bg-red-50 hover:text-red-500"
-                                            onClick={() => remove(index)}
-                                            disabled={isPending}
-                                        >
-                                            Șterge tranșa
-                                        </Button>
-                                    )}
-                                </CardContent>
-                            </Card>
-                        ))}
+                                return (<Card key={field.id} className="shadow-xs py-4 px-4">
+                                        <CardHeader className="text-md font-medium px-0">
+                                            <CardTitle>{cardTitle}</CardTitle>
+                                            <CardDescription></CardDescription>
+                                        </CardHeader>
+                                        <CardContent className="px-0 grid flex-1 auto-rows-min gap-4">
+                                            <FormDateTimePicker
+                                                name={`installments.${index}.date`}
+                                                label="Data"
+                                                required
+                                                disabled={isPending}
+                                            />
+                                            <FormField name={`installments.${index}.total_amount`}
+                                                       label="Valoare totală"
+                                                       placeholder="Introduceți valoarea"
+                                                       required
+                                                       type="number"
+                                                       min={0}
+                                                       max={1000000000}
+                                                       disabled={isPending}
+                                            />
+                                            <FormField name={`installments.${index}.total_financial_help`}
+                                                       label="Valoare ajutor financiar nerambursabil"
+                                                       placeholder="Introduceți valoarea"
+                                                       required
+                                                       type="number"
+                                                       min={0}
+                                                       max={1000000000}
+                                                       disabled={isPending}
+                                            />
+
+                                            {canRemove(index) && (
+                                                <Button
+                                                    variant="dashed"
+                                                    className="text-red-500 border-red-300 hover:bg-red-50 hover:text-red-500"
+                                                    onClick={() => remove(index)}
+                                                    disabled={isPending}
+                                                >
+                                                    Șterge tranșa
+                                                </Button>
+                                            )}
+                                        </CardContent>
+                                    </Card>
+                                );
+                            }
+                        )}
 
                         {canAdd && (
                             <Button

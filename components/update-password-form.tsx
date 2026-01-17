@@ -47,7 +47,7 @@ export function UpdatePasswordForm({className, ...props}: React.ComponentPropsWi
             if (error) {
                 throw error;
             }
-            router.push('/my-account');
+            router.push('/contul-meu');
         } catch (error) {
             console.error(error);
             toast.error("S-a produs o eroare de sistem, vă rugăm încercați din nou.")

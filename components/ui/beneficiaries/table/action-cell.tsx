@@ -30,7 +30,7 @@ export default function ActionCell({beneficiary}: ActionCellProps) {
             async () => {
                 await deleteBeneficiary(beneficiary.id)
             },
-            `Ești sigur că vrei să ștergi beneficiarul "${beneficiary.name}"? Această acțiune nu poate fi anulată.`,
+            `Ești sigur că vrei să ștergi beneficiarul "${beneficiary.name}"? Această acțiune va șterge și toate proiectele asociate acestui beneficiar.`,
             {
                 actionLabel: "Șterge",
                 cancelLabel: "Anulează",
@@ -57,10 +57,11 @@ export default function ActionCell({beneficiary}: ActionCellProps) {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator/>
                     <DropdownMenuItem
+                        variant="destructive"
                         onClick={handleDeleteClick}
-                        className="flex items-center gap-2 cursor-pointer text-red-400"
+                        className="flex items-center gap-2 cursor-pointer"
                     >
-                        <Trash2 className="w-4 h-4 text-red-400"/>
+                        <Trash2 className="w-4 h-4"/>
                         <span>Șterge</span>
                     </DropdownMenuItem>
                 </DropdownMenuContent>

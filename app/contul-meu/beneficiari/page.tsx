@@ -12,13 +12,15 @@ export default async function Beneficiaries() {
         redirect('/auth/login');
     }
 
+    const isAdmin = data?.claims?.user_role === 'admin';
+
     const counties = await getCounties({
         onlyAllowed: false
     });
 
     const breadcrumbsItems = [
-        {href: '/my-account', title: 'Contul meu'},
-        {href: '/my-account/beneficiaries', title: 'Beneficiari'}
+        {href: '/contul-meu', title: 'Contul meu'},
+        {href: '/contul-meu/beneficiari', title: 'Beneficiari'}
     ]
 
     return (
@@ -26,9 +28,9 @@ export default async function Beneficiaries() {
             <BreadcrumbComponent items={breadcrumbsItems}/>
             <div>
                 <h1 className="font-medium text-2xl">Beneficiari</h1>
-                <p className="text-muted-foreground">Administreaza datele beneficiarilor pe care îi reprezinți.</p>
+                <p className="text-muted-foreground">Administrează datele beneficiarilor pe care îi reprezinți.</p>
             </div>
-            <BeneficiariesClient counties={counties ?? []}/>
+            <BeneficiariesClient counties={counties ?? []} isAdmin={isAdmin}/>
         </div>
     )
 }

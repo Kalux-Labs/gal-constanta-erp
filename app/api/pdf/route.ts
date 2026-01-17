@@ -3,13 +3,20 @@ import {ProjectPrivate} from "@/lib/types/project";
 
 export const runtime = 'nodejs'
 
-import { NextRequest } from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 import {renderToBuffer} from '@react-pdf/renderer';
-import { FormTemplate } from "@/lib/pdf/templates/form";
+import {FormTemplate} from "@/lib/pdf/templates/form";
 import {format} from "date-fns";
+import {requireAuth} from "@/lib/server/api/utils";
 
 export async function POST(request: NextRequest) {
     try {
+        const auth = await requireAuth();
+
+        if (auth.error) {
+            return auth.error;
+        }
+
         const data: ProjectPrivate = await request.json();
         const now = Date.now();
         const formattedDate = format(now, 'dd_MM_yyyy')
@@ -21,14 +28,14 @@ export async function POST(request: NextRequest) {
             headers: {
                 'Content-Type': 'application/pdf',
                 'Content-Disposition': `attachment; filename=declaratie_de_esalonare_${data.code}_${formattedDate}.pdf`,
+                'Content-Length': pdfBuffer.length.toString(),
             },
         });
     } catch (error: any) {
-        return new Response(JSON.stringify({
-            error: error.message
-        }), {
-            status: 500,
-            headers: { 'Content-Type': 'application/json' }
-        });
+        console.error(error);
+        return NextResponse.json(
+            {error: "Eroare internă a serverului"},
+            {status: 500}
+        );
     }
 }

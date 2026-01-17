@@ -43,7 +43,7 @@ export default function ProjectFilters({
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            county: county,
+            county: county || counties.at(0),
             city: city,
             search: search
         }
@@ -71,7 +71,7 @@ export default function ProjectFilters({
 
     const watchedCounty = form.watch("county");
 
-    return <Card className="shadow-none py-4">
+    return <Card className="shadow-none py-0">
         <CardContent className="px-4 py-4">
             <FormProvider {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}

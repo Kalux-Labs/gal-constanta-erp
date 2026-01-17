@@ -24,6 +24,8 @@ import {BeneficiaryPrivate} from "@/lib/types/beneficiary";
 import County from "@/lib/types/county";
 import City from "@/lib/types/city";
 import {useCounties} from "@/lib/hooks/counties/use-counties";
+import {assignFormErrors} from "@/lib/validation/utils";
+import {toast} from "sonner";
 
 interface NewBeneficiarySheetProps {
     beneficiary?: BeneficiaryPrivate;
@@ -31,6 +33,7 @@ interface NewBeneficiarySheetProps {
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
     counties?: County[];
+    canCreate?: boolean;
 }
 
 export default function NewBeneficiarySheet({
@@ -38,7 +41,8 @@ export default function NewBeneficiarySheet({
                                                 trigger,
                                                 open: externalOpen,
                                                 onOpenChange: externalOnOpenChange,
-                                                counties: initialCounties
+                                                counties: initialCounties,
+                                                canCreate = true,
                                             }: NewBeneficiarySheetProps) {
 
     const [internalOpen, setInternalOpen] = useState(false);
@@ -111,13 +115,22 @@ export default function NewBeneficiarySheet({
                 form.reset();
                 setOpen(false);
             },
+            onError: (error) => {
+                if(error.response?.data?.errors) {
+                    assignFormErrors<BeneficiaryFormData>(form, error.response?.data?.errors)
+                }
+            }
         });
     };
 
     const handleSubmitClick = async () => {
-        const isValid = await form.trigger();
-        if (isValid) {
-            await form.handleSubmit(onSubmit)();
+        if(canCreate || isEditing) {
+            const isValid = await form.trigger();
+            if (isValid) {
+                await form.handleSubmit(onSubmit)();
+            }
+        } else {
+            toast.error("Un cont poate avea un singur beneficiar asociat.")
         }
     };
 
@@ -146,7 +159,7 @@ export default function NewBeneficiarySheet({
                             label="Nume"
                             placeholder="Introduceți numele"
                             required
-                            disabled={isPending}
+                            disabled={isPending || !canCreate}
                         />
 
                         <FormField<BeneficiaryFormData>
@@ -154,7 +167,7 @@ export default function NewBeneficiarySheet({
                             label="CUI"
                             placeholder="Introduceți CUI-ul"
                             required
-                            disabled={isPending}
+                            disabled={isPending || isEditing  || !canCreate}
                         />
 
                         <FormCombobox<BeneficiaryFormData, County>
@@ -163,7 +176,7 @@ export default function NewBeneficiarySheet({
                             placeholder="Selectați județul"
                             searchPlaceholder="Căutați județ..."
                             options={counties}
-                            disabled={isPending || countiesLoading}
+                            disabled={isPending || countiesLoading  || !canCreate}
                             required
                             showError
                             getId={(c) => c.id}
@@ -176,7 +189,7 @@ export default function NewBeneficiarySheet({
                             placeholder={!watchedCounty ? "Selectați mai întâi județul" : "Selectați orașul"}
                             searchPlaceholder="Căutați orașul..."
                             options={cities}
-                            disabled={!watchedCounty || citiesLoading || isPending}
+                            disabled={!watchedCounty || citiesLoading || isPending  || !canCreate}
                             required
                             showError
                             getId={(c) => c.id}
@@ -188,7 +201,7 @@ export default function NewBeneficiarySheet({
                             label="Strada"
                             placeholder="Introduceți adresa străzii"
                             required
-                            disabled={isPending}
+                            disabled={isPending  || !canCreate}
                         />
 
                         <FormField<BeneficiaryFormData>
@@ -196,7 +209,7 @@ export default function NewBeneficiarySheet({
                             label="Cod Poștal"
                             placeholder="Introduceți codul poștal (6 cifre)"
                             required
-                            disabled={isPending}
+                            disabled={isPending  || !canCreate}
                         />
 
                         <FormField<BeneficiaryFormData>
@@ -204,7 +217,7 @@ export default function NewBeneficiarySheet({
                             label="Telefon"
                             placeholder="Introduceți numărul de telefon"
                             required
-                            disabled={isPending}
+                            disabled={isPending  || !canCreate}
                         />
 
                         <FormField<BeneficiaryFormData>
@@ -212,7 +225,7 @@ export default function NewBeneficiarySheet({
                             label="Cont Bancar"
                             placeholder="Introduceți IBAN-ul"
                             required
-                            disabled={isPending}
+                            disabled={isPending  || !canCreate}
                         />
 
                         <FormField<BeneficiaryFormData>
@@ -220,7 +233,7 @@ export default function NewBeneficiarySheet({
                             label="Reprezentant Legal"
                             placeholder="Introduceți numele reprezentantului legal"
                             required
-                            disabled={isPending}
+                            disabled={isPending  || !canCreate}
                         />
 
                         <p className="text-muted-foreground text-xs">Câmpuri opționale</p>
@@ -230,7 +243,7 @@ export default function NewBeneficiarySheet({
                             label="Email"
                             placeholder="Introduceți adresa de email"
                             type="email"
-                            disabled={isPending}
+                            disabled={isPending  || !canCreate}
                         />
                     </form>
                 </FormProvider>
@@ -238,7 +251,7 @@ export default function NewBeneficiarySheet({
                 <SheetFooter className="mt-6">
                     <Button
                         onClick={handleSubmitClick}
-                        disabled={isPending}
+                        disabled={isPending  || !canCreate}
                         loading={isPending}
                     >
                         {submitText}

@@ -8,6 +8,7 @@ import StatisticCards from "@/components/ui/projects/common/statistics-card";
 import StatisticsChart from "@/components/ui/projects/common/statistics-chart";
 import {getProjectsSummaryByCities} from "@/lib/supabase/utils/statistics/statistics.server";
 import ProjectsSummaryChart from "@/components/ui/projects/common/projects-summary-by-cities-chart";
+import Banner from "@/components/general/banner";
 
 
 type SearchParams = Promise<{
@@ -42,9 +43,16 @@ export default async function Home({
 
     const projectsSummaryByCities = await getProjectsSummaryByCities();
 
-    const {allFinishedProjectsCount, allProjectsCount, totalFinancedAmount} = await getProjectsStatistics();
+    const {
+        allFinishedProjectsCount,
+        allProjectsCount,
+        totalFinancedAmount,
+        totalAidReceivedAmount,
+        totalOverdueInstallments,
+        allAdvancedProjectsCount
+    } = await getProjectsStatistics();
 
-    const cards = [
+    const projectStatisticsCards = [
         {
             title: "Total proiecte",
             subtitle: "Toate proiectele înregistrate",
@@ -56,23 +64,47 @@ export default async function Home({
             value: allFinishedProjectsCount,
         },
         {
-            title: "Finanțare nerambursabilă",
-            subtitle: "Valoare totală acordată",
+            title: "Proiecte avansate",
+            subtitle: "Stadiu avansat de implementare",
+            value: allAdvancedProjectsCount,
+            tooltip: 'Progres între 40 și 98%'
+        },
+    ];
+
+    const financingStatisticsCard = [
+        {
+            title: "Finanțare contractată",
+            subtitle: "Valoare totală proiecte finalizate",
             value: totalFinancedAmount,
-            type: 'currency'
-        }
-    ]
+            type: 'currency',
+            tooltip: 'Valoare totată contractată pentru proiectele finalizate'
+        },
+        {
+            title: "Finanțare nerambursabilă",
+            subtitle: "Valoare totală proiecte finalizate",
+            value: totalAidReceivedAmount,
+            type: 'currency',
+            tooltip: 'Valoare totată nerambursabile pentru proiectele finalizate'
+        },
+        {
+            title: "Tranșe plătite",
+            subtitle: "Valoare totală achitată",
+            value: totalOverdueInstallments,
+            type: 'currency',
+            tooltip: "Valoarea totală a tranșelor de finanțare deja achitate inclusiv pentru proiectele nefinalizate"
+        },
+    ];
 
     const now = new Date();
 
     return (
         <div className="max-w-4xl mx-auto mb-8 flex flex-col gap-4 px-4">
-            <div>
-                <h1 className="text-primary leading-tighter text-4xl font-bold tracking-tight text-balance xl:text-5xl">Proiecte</h1>
-            </div>
+            <Banner/>
+            <h1 className="text-primary leading-tighter text-4xl font-bold tracking-tight text-balance xl:text-5xl">Proiecte</h1>
             <StatisticsChart date={now}/>
             <ProjectsSummaryChart data={projectsSummaryByCities}/>
-            <StatisticCards cards={cards}/>
+            <StatisticCards cards={projectStatisticsCards}/>
+            <StatisticCards cards={financingStatisticsCard}/>
             <ProjectFilters counties={counties} cities={cities} search={search}/>
             <ServerPaginatedDataTable page={page} perPage={perPage} columns={columns} data={data}
                                       total={count}/>

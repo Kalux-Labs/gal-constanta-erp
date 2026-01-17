@@ -26,7 +26,6 @@ export async function PUT(
             .from("beneficiaries")
             .update({
                 name: validatedData.name,
-                cui: validatedData.cui,
                 county_id: validatedData.county!.id,
                 city_id: validatedData.city!.id,
                 street: validatedData.street,
@@ -77,7 +76,7 @@ export async function DELETE(
 
         const {id} = await params;
 
-        const {supabase} = auth;
+        const {supabase, user} = auth;
 
         const {data: claimsData, error: claimsError} =
             await supabase.auth.getClaims();
@@ -91,21 +90,43 @@ export async function DELETE(
 
         const userRole = claimsData?.claims?.user_role;
 
-        const {error: deleteError} = userRole === "admin"
-            ? await supabase
+        if (userRole === "admin") {
+            // Admin: hard delete beneficiary
+            const {error: deleteError} = await supabase
                 .from("beneficiaries")
                 .delete()
-                .eq("id", id)
-            : await supabase
+                .eq("id", id);
+
+            if (deleteError) {
+                return NextResponse.json(
+                    {error: "Nu s-a putut șterge beneficiarul"},
+                    {status: 500}
+                );
+            }
+        } else {
+            const {error: updateBeneficiaryError} = await supabase
                 .from("beneficiaries")
                 .update({user_id: null})
                 .eq("id", id);
 
-        if (deleteError) {
-            return NextResponse.json(
-                {error: "Nu s-a putut șterge beneficiarul"},
-                {status: 500}
-            );
+            if (updateBeneficiaryError) {
+                return NextResponse.json(
+                    {error: "Nu s-a putut șterge beneficiarul"},
+                    {status: 500}
+                );
+            }
+
+            const {error: updateProjectsError} = await supabase
+                .from("projects")
+                .update({user_id: null})
+                .eq("user_id", user.id);
+
+            if (updateProjectsError) {
+                return NextResponse.json(
+                    {error: "Nu s-au putut actualiza proiectele"},
+                    {status: 500}
+                );
+            }
         }
 
         return NextResponse.json(

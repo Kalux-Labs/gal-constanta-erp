@@ -123,5 +123,98 @@
         overflow: visible !important;
         margin-right: 0 !important;
     }
+
+    .terms-page,
+    .privacy-page {
+        h1 {
+            @apply text-3xl font-bold mb-6 text-gray-900;
+        }
+
+        h2 {
+            @apply text-2xl font-semibold mt-10 mb-4 text-gray-800;
+        }
+
+        h3 {
+            @apply text-xl font-semibold mt-8 mb-3 text-gray-800;
+        }
+
+        h4 {
+            @apply text-lg font-medium mt-6 mb-2 text-gray-700;
+        }
+
+        p {
+            @apply text-base leading-relaxed mb-4 text-gray-700;
+        }
+
+        ul {
+            @apply list-disc pl-6 mb-4 space-y-1 text-gray-700;
+        }
+
+        ol {
+            @apply list-decimal pl-6 mb-4 space-y-1 text-gray-700;
+        }
+
+        li {
+            @apply leading-relaxed;
+        }
+
+        a {
+            @apply text-blue-600 underline hover:text-blue-800;
+        }
+
+        blockquote {
+            @apply border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-4;
+        }
+
+        strong {
+            @apply font-semibold text-gray-900;
+        }
+
+        em {
+            @apply italic text-gray-700;
+        }
+
+        hr {
+            @apply my-6 border-t border-gray-300;
+        }
+
+        table {
+            @apply w-full border border-gray-300 border-collapse mb-6;
+        }
+
+        th {
+            @apply bg-gray-100 border border-gray-300 px-3 py-2 text-left font-semibold;
+        }
+
+        td {
+            @apply border border-gray-300 px-3 py-2;
+        }
+
+        code {
+            @apply bg-gray-100 px-1 py-0.5 rounded text-sm font-mono text-gray-800;
+        }
+
+        pre {
+            @apply bg-gray-100 p-4 rounded text-sm font-mono overflow-x-auto;
+        }
+    }
 }
 
+
+.high-contrast {
+    filter: contrast(1.05);
+}
+
+.reduce-motion * {
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+    button:hover,
+    a:hover,
+    [role="button"],
+    [data-slot="card"]:hover {
+       box-shadow: none !important;
+    }
+}
+
+/*#347ab6*/

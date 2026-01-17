@@ -106,10 +106,10 @@ export function FormCombobox<TFieldValues extends FieldValues, T>({
                                 variant="outline"
                                 role="combobox"
                                 className={cn(
-                                    "w-full justify-between",
+                                    "w-full justify-between font-normal",
                                     !field.value && "text-muted-foreground",
                                     fieldState.error && "border-red-500 bg-red-50",
-                                    variant === "dashed" && "border-dashed"
+                                    variant === "dashed" && "border-dashed",
                                 )}
                                 disabled={disabled}
                             >

@@ -145,13 +145,18 @@ export function FormTemplate({data}: FormDocumentProps) {
         return `${rate}%`;
     };
 
-    // Calculate totals from all financial records
     const financialTotals = data.financial_records?.reduce(
         (acc, record) => {
+            const latestDate = data.financial_records.reduce((max, r) => {
+                return new Date(r.created_at) > new Date(max) ? r.created_at : max;
+            }, data.financial_records[0]?.created_at || '');
+
+            if (record.created_at !== latestDate) return acc;
+
             const recordTotals = record.installments.reduce(
                 (installmentAcc, installment) => ({
-                    totalAmount: installmentAcc.totalAmount + installment.total_amount,
-                    totalHelp: installmentAcc.totalHelp + installment.total_financial_help,
+                    totalAmount: installmentAcc.totalAmount + (Number(installment.total_amount) || 0),
+                    totalHelp: installmentAcc.totalHelp + (Number(installment.total_financial_help) || 0),
                 }),
                 {totalAmount: 0, totalHelp: 0}
             );
@@ -163,12 +168,14 @@ export function FormTemplate({data}: FormDocumentProps) {
         {totalAmount: 0, totalHelp: 0}
     ) || {totalAmount: 0, totalHelp: 0};
 
+
     const isInitial = data.financial_records?.length === 0;
     const lastFinancialRecord = data.financial_records
         ?.slice()
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
         .at(0);
     const type = isInitial ? "INITIALA" : "RECTIFICATA"
+
 
     return (
         <Document>

@@ -1,8 +1,6 @@
-// lib/utils/date-format.ts
-import { format } from "date-fns";
-import { ro } from "date-fns/locale";
+import {format} from "date-fns";
+import {ro} from "date-fns/locale";
 
-// Define format presets
 export const DATE_FORMATS = {
     short: "dd.MM.yyyy",              // 08.01.2026
     medium: "dd MMM yyyy",             // 08 ian 2026
@@ -26,19 +24,17 @@ export function formatDate(
     try {
         const dateObj = date instanceof Date ? date : new Date(date);
 
-        // Check if it's a preset or custom format
         const formatStr = formatPreset in DATE_FORMATS
             ? DATE_FORMATS[formatPreset as DateFormatPreset]
             : formatPreset;
 
-        return format(dateObj, formatStr, { locale: ro });
+        return format(dateObj, formatStr, {locale: ro});
     } catch (error) {
-        console.error("Error formatting date:", error);
+        console.error(error);
         return null;
     }
 }
 
-// Convenience functions for common formats
 export const formatDateShort = (date: Date | string | null) => formatDate(date, "short");
 export const formatDateMedium = (date: Date | string | null) => formatDate(date, "medium");
 export const formatDateMediumFull = (date: Date | string | null) => formatDate(date, "mediumFull");

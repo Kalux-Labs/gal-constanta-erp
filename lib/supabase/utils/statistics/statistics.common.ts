@@ -12,15 +12,15 @@ export async function fetchStatistics(
         {
             p_start: options.startDate,
             p_end: options.endDate,
+            p_type: options.type,
             p_threshold_started: options.startedThreshold,
             p_threshold_advanced: options.advancedThreshold,
             p_threshold_finished: options.finishedThreshold,
-            p_type: options.type
         });
 
     if (error) {
         return [];
-    }
+    }A
 
     return data as FinancialProgressChartItem[] || [];
 }

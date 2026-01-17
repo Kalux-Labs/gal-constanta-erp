@@ -1,0 +1,23 @@
+import Image from "next/image";
+import Link from "next/link";
+
+## Înregistrare cont
+
+Pentru a utiliza platforma, este necesară crearea unui cont de utilizator.
+
+### Pași pentru înregistrare
+1. Accesați pagina de <Link href={"/auth/register"} className={"underline"}>**Înregistrare**</Link>.
+2. Completați următoarele câmpuri:
+- Adresă de email
+- Parolă
+- Confirmare parolă
+3. Apăsați butonul **Înregistrare**.
+
+### Confirmarea contului
+- Dacă datele introduse sunt corecte, veți primi un email de confirmare a contului.
+- După apăsarea butonului din email, contul va fi activat automat.
+- Utilizatorul va fi redirecționat către pagina de cont personal.
+
+### Erori posibile
+- În cazul în care înregistrarea eșuează, un mesaj de eroare va fi afișat în aplicație.
+- Nu se va trimite email de confirmare dacă datele sunt invalide.

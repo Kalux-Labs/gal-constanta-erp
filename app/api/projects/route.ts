@@ -45,10 +45,14 @@ export async function POST(request: NextRequest) {
         if (error) {
             if (error.message.includes('projects_code_key')) {
                 return NextResponse.json(
-                    {errors: [{code: "projects_code_key", message: "Codul trebuie să fie unic", path: ["code"]}],},
+                    {
+                        error: "Codul trebuie să fie unic.",
+                        errors: [{code: "server", message: "Codul trebuie să fie unic", path: ["code"]}],
+                    },
                     {status: 409}
                 )
             }
+            console.log(error);
             return NextResponse.json(
                 {error: "Nu s-a putut creea proiectul"},
                 {status: 500}

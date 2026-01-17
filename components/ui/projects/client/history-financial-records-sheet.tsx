@@ -83,7 +83,7 @@ export default function HistoryFinancialRecordsSheet({
                                             {formatFinancialRecordType(project.financial_records.length - index)}
                                         </Badge>
                                         <Badge variant="outline" className="text-sm">
-                                            {formatInstallmentsNumber(financialRecord.installments.length)}
+                                            {formatInstallmentsNumber(financialRecord.installments.length - 1)}
                                         </Badge>
                                     </div>
                                 </CardTitle>
@@ -92,26 +92,30 @@ export default function HistoryFinancialRecordsSheet({
                                     {formatDateToNow(financialRecord.created_at)}</CardDescription>
                             </CardHeader>
                             <CardContent className="px-4 grid flex-1 auto-rows-min gap-4 pb-4">
-                                {financialRecord.installments.map((installment, index) => (
-                                    <Card key={`installment-${index}`} className="shadow-none py-4 px-4 gap-4">
-                                        <div className="flex flex-row justify-between items-center">
-                                            <Badge variant={"secondary"} className="text-sm">Tranșa {index + 1}</Badge>
-                                            <div className="flex flex-row gap-2 items-center text-muted-foreground">
-                                                <CalendarClock className="h-4 w-4"/>
-                                                <p className="text-sm font-medium">{formatDayMonthYear(installment.date)}</p>
+                                {financialRecord.installments.map((installment, index) => {
+                                    const installmentType = index == 0 ? 'Avans' : `Tranșa ${index}`;
+
+                                    return (
+                                        <Card key={`installment-${index}`} className="shadow-none py-4 px-4 gap-4">
+                                            <div className="flex flex-row justify-between items-center">
+                                                <Badge variant={"secondary"} className="text-sm">{installmentType}</Badge>
+                                                <div className="flex flex-row gap-2 items-center text-muted-foreground">
+                                                    <CalendarClock className="h-4 w-4"/>
+                                                    <p className="text-sm font-medium">{formatDayMonthYear(installment.date)}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="flex flex-col gap-2">
-                                            <p className="text-sm text-muted-foreground">Valoare totală</p>
-                                            <p className="text-lg font-bold">{installment.total_amount} RON</p>
-                                        </div>
-                                        <div className="flex flex-col gap-2">
-                                            <p className="text-sm text-muted-foreground">Ajutor financiar
-                                                nerambursabil</p>
-                                            <p className="text-lg font-bold">{installment.total_financial_help} RON</p>
-                                        </div>
-                                    </Card>
-                                ))}
+                                            <div className="flex flex-col gap-2">
+                                                <p className="text-sm text-muted-foreground">Valoare totală</p>
+                                                <p className="text-lg font-bold">{installment.total_amount} RON</p>
+                                            </div>
+                                            <div className="flex flex-col gap-2">
+                                                <p className="text-sm text-muted-foreground">Ajutor financiar
+                                                    nerambursabil</p>
+                                                <p className="text-lg font-bold">{installment.total_financial_help} RON</p>
+                                            </div>
+                                        </Card>
+                                    )
+                                })}
                             </CardContent>
                         </Card>
                     ))}

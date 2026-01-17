@@ -24,7 +24,7 @@ export default function ProjectsClient({counties, cities}: {
     const searchParams = useSearchParams();
     const router = useRouter();
 
-    const shouldOpen = searchParams.get("new") === "1";
+    const shouldOpen = searchParams.get("nou") === "1";
 
     const [open, setOpen] = useState<boolean>(false);
 
@@ -39,7 +39,7 @@ export default function ProjectsClient({counties, cities}: {
     useEffect(() => {
         if (shouldOpen) {
             setOpen(true);
-            router.replace("/my-account/projects")
+            router.replace("/contul-meu/proiecte")
         }
     }, [shouldOpen, router]);
 

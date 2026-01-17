@@ -29,6 +29,7 @@ import {Plus} from "lucide-react";
 import Link from "next/link";
 import {useCounties} from "@/lib/hooks/counties/use-counties";
 import {useCities} from "@/lib/hooks/cities/use-cities";
+import {assignFormErrors} from "@/lib/validation/utils";
 
 interface NewProjectSheetProps {
     project?: ProjectPrivate;
@@ -102,7 +103,24 @@ export default function NewProjectSheet({
         defaultValues: getDefaultValues(),
     });
 
-    const watchedCounty = form.watch("implementation_county");
+    const {
+        implementation_county: watchedCounty,
+        total_eligible_financing_amount: watchedTotalAmount,
+        non_refundable_financing_aid_rate: watchedFinancingAidRate
+    } = form.watch();
+
+    useEffect(() => {
+        if (watchedTotalAmount && watchedFinancingAidRate) {
+            const computedAidAmount = (watchedTotalAmount * watchedFinancingAidRate) / 100;
+            form.setValue("non_refundable_financing_aid_amount", computedAidAmount);
+        }
+    }, [watchedTotalAmount, watchedFinancingAidRate, form])
+
+    useEffect(() => {
+        if (beneficiaries && beneficiaries.data.length > 0) {
+            form.setValue("beneficiary", beneficiaries.data[0]);
+        }
+    }, [beneficiaries, form]);
 
     useEffect(() => {
         if (open && project) {
@@ -124,6 +142,11 @@ export default function NewProjectSheet({
                 form.reset();
                 setOpen(false);
             },
+            onError: (error) => {
+                if (error.response?.data?.errors) {
+                    assignFormErrors<ProjectFormData>(form, error.response?.data?.errors)
+                }
+            }
         });
     };
 
@@ -163,7 +186,6 @@ export default function NewProjectSheet({
                             disabled={isPending}
                         />
 
-
                         <FormCombobox<ProjectFormData, BeneficiaryPrivate>
                             name="beneficiary"
                             label="Beneficiar"
@@ -177,12 +199,15 @@ export default function NewProjectSheet({
                             required
                         />
 
-                        <Button variant="dashed" asChild>
-                            <Link href="/my-account/beneficiaries?new=1">
-                                <Plus/>
-                                Creează un nou beneficiar
-                            </Link>
-                        </Button>
+                        {beneficiaries && beneficiaries.data.length === 0 && (
+                            <Button variant="dashed" asChild>
+                                <Link href="/contul-meu/beneficiari?new=1">
+                                    <Plus/>
+                                    Creează un nou beneficiar
+                                </Link>
+                            </Button>
+                        )
+                        }
 
                         <FormField<ProjectFormData>
                             name="code"

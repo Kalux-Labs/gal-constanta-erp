@@ -8,49 +8,39 @@ import ClientPaginatedDataTable from "@/components/ui/client-paginated-data-tabl
 import {columns} from "@/components/ui/beneficiaries/table/columns";
 import County from "@/lib/types/county";
 import {useRouter, useSearchParams} from "next/navigation";
-import City from "@/lib/types/city";
-import TableFilters from "@/components/ui/table-filters";
-import {useCities} from "@/lib/hooks/cities/use-cities";
+import {InfoIcon} from "lucide-react";
+import {toast} from "sonner";
 
-export default function BeneficiariesClient({counties}: {
+export default function BeneficiariesClient({counties, isAdmin}: {
     counties: County[];
+    isAdmin: boolean;
 }) {
     const [page, setPage] = useState(1);
     const [perPage] = useState(10);
-    const [search, setSearch] = useState("");
-    const [county, setCounty] = useState<County | null>(null);
-    const [city, setCity] = useState<City | null>(null);
-
-    const {data: cities = []} = useCities({
-        countyId: county?.id,
-        onlyAllowed: false
-    });
 
     const searchParams = useSearchParams();
     const router = useRouter();
 
-    const shouldOpen = searchParams.get("new") === "1";
+    const shouldOpen = searchParams.get("nou") === "1";
 
     const [open, setOpen] = useState<boolean>(false);
 
-    const {data, isLoading, refetch} = useBeneficiaries({
-        page, perPage, search, countyId: county?.id, cityId: city?.id
+    const {data, isLoading} = useBeneficiaries({
+        page, perPage
     });
+
+    const canCreate = (data?.data?.length ?? 0) < 1 || isAdmin;
 
     const onPageChangeAction = (page: number) => {
         setPage(page);
     }
 
     useEffect(() => {
-        if (shouldOpen) {
+        if (shouldOpen && canCreate) {
             setOpen(true);
-            router.replace("/my-account/beneficiaries")
+            router.replace("/contul-meu/beneficiari")
         }
-    }, [shouldOpen, router]);
-
-    useEffect(() => {
-        refetch();
-    }, [page, perPage, search, county, city, refetch])
+    }, [shouldOpen, router, canCreate]);
 
     return (
         <>
@@ -58,35 +48,22 @@ export default function BeneficiariesClient({counties}: {
                 <NewBeneficiarySheet
                     open={open}
                     onOpenChange={setOpen}
-                    trigger={<Button>Adaugă un nou beneficiar</Button>}
+                    trigger={
+                        <Button disabled={!canCreate}>
+                            Adaugă un nou beneficiar
+                        </Button>
+                    }
                     counties={counties}
+                    canCreate={canCreate}
                 />
             </div>
-
-            <TableFilters
-                counties={counties}
-                cities={cities}
-                onSearchChange={(value) => {
-                    setPage(1);
-                    if (value.length >= 3 || value.length === 0) {
-                        setSearch(value);
-                    }
-                }}
-                onCountyChange={(value) => {
-                    setPage(1);
-                    setCounty(value);
-                }}
-                onCityChange={(value) => {
-                    setPage(1);
-                    setCity(value);
-                }}
-                disabled={open}
-            />
-
             <ClientPaginatedDataTable page={page} perPage={perPage} columns={columns} data={data?.data ?? []}
                                       total={data?.count ?? 0} isLoading={isLoading}
                                       onPageChangeAction={onPageChangeAction}/>
-
+            <p className="text-xs text-muted-foreground font-regular flex flex-row gap-1 items-center">
+                <InfoIcon className="h-3 w-3"/>
+                Poți avea un singur beneficiar asociat.
+            </p>
         </>
     );
 }
