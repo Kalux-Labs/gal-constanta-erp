@@ -8,6 +8,7 @@ import {renderToBuffer} from '@react-pdf/renderer';
 import {FormTemplate} from "@/lib/pdf/templates/form";
 import {format} from "date-fns";
 import {requireAuth} from "@/lib/server/api/utils";
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST(request: NextRequest) {
     try {
@@ -32,7 +33,13 @@ export async function POST(request: NextRequest) {
             },
         });
     } catch (error: any) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                section: 'api/pdf/route.ts',
+                action: 'create'
+            }
+        });
         return NextResponse.json(
             {error: "Eroare internă a serverului"},
             {status: 500}

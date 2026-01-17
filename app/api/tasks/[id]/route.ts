@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
 import {taskSchema} from "@/lib/validation/schemas/task-schema";
 import {requireAdmin, validateBody} from "@/lib/server/api/utils";
+import * as Sentry from "@sentry/nextjs";
 
 export async function PUT(
     request: NextRequest,
@@ -55,7 +56,13 @@ export async function PUT(
 
         return NextResponse.json(data);
     } catch (error) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                section: 'tasks/[id]/route.ts',
+                action: 'update'
+            }
+        });
         return NextResponse.json(
             {error: "Eroare internă a serverului"},
             {status: 500}
@@ -81,8 +88,23 @@ export async function DELETE(
             .eq("id", id).select().single();
 
         if (error) {
-            console.error(error);
+            Sentry.captureException(error, {
+                level: 'error',
+                tags: {
+                    section: 'tasks/[id]/route.ts',
+                    action: 'delete',
+                    details: 'dbError'
+                }
+            });
             if (error.code === '23503') {
+                Sentry.captureException(error, {
+                    level: 'error',
+                    tags: {
+                        section: 'tasks/[id]/route.ts',
+                        action: 'delete',
+                        details: 'dbError - 23503'
+                    }
+                });
                 return NextResponse.json(
                     {error: "Nu s-a putut șterge activitatea"},
                     {status: 409}
@@ -106,7 +128,13 @@ export async function DELETE(
             {status: 200}
         );
     } catch (error) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                section: 'tasks/[id]/route.ts',
+                action: 'delete'
+            }
+        });
         return NextResponse.json(
             {error: "Eroare internă a serverului"},
             {status: 500}

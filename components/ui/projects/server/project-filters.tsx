@@ -34,9 +34,12 @@ export default function ProjectFilters({
 
     const formSchema = z.object({
         county: countySchemaExtended,
-        city: citySchemaExtended.nullable().optional(),
-        search: z.string().nullable().optional(),
-    })
+        city: citySchemaExtended.nullable(),
+        search: z.string().optional(),
+    }).refine((data) => data.county !== null, {
+        message: "Județul este obligatoriu",
+        path: ["county"]
+    });
 
     type FormData = z.infer<typeof formSchema>;
 

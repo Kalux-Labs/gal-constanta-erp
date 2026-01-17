@@ -34,6 +34,12 @@ const beneficiarySchema = z.object({
         .min(1, "Reprezentantul legal este obligatoriu")
         .min(3, "Numele reprezentantului legal trebuie să aibă cel puțin 3 caractere")
         .max(255, "Numele reprezentantului legal nu trebuie să depășească 255 caractere"),
+}).refine((data) => data.county !== null, {
+    message: "Județul este obligatoriu",
+    path: ["county"]
+}).refine((data) => data.city !== null, {
+    message: "Orașul este obligatoriu",
+    path: ["city"]
 });
 
 type BeneficiaryFormData = z.infer<typeof beneficiarySchema>;

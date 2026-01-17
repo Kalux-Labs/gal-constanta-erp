@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
 import {projectSchema} from "@/lib/validation/schemas/project-schema";
 import {requireAuth, validateBody} from "@/lib/server/api/utils";
+import * as Sentry from "@sentry/nextjs";
 
 export async function PUT(
     request: NextRequest,
@@ -45,6 +46,14 @@ export async function PUT(
             .single();
 
         if (error) {
+            Sentry.captureException(error, {
+                level: 'error',
+                tags: {
+                    section: 'api/projects/[id]/route.ts',
+                    action: 'create',
+                    details: 'dbError - error'
+                }
+            });
             return NextResponse.json(
                 {error: "Nu s-a putut actualiza proiectul"},
                 {status: 500}
@@ -52,6 +61,14 @@ export async function PUT(
         }
 
         if (!data) {
+            Sentry.captureException(error, {
+                level: 'error',
+                tags: {
+                    section: 'api/projects/[id]/route.ts',
+                    action: 'create',
+                    details: 'dbError - no data'
+                }
+            });
             return NextResponse.json(
                 {error: "Nu s-a putut actualiza proiectul"},
                 {status: 404}
@@ -60,7 +77,13 @@ export async function PUT(
 
         return NextResponse.json(data, {status: 200});
     } catch (error) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                section: 'api/projects/[id]/route.ts',
+                action: 'create',
+            }
+        });
         return NextResponse.json(
             {error: "Eroare internă a serverului"},
             {status: 500}
@@ -105,6 +128,14 @@ export async function DELETE(
                 .eq("id", id);
 
         if (deleteError) {
+            Sentry.captureException(deleteError, {
+                level: 'error',
+                tags: {
+                    section: 'api/projects/[id]/route.ts',
+                    action: 'delete',
+                    details: 'dbError - deleteError'
+                }
+            });
             return NextResponse.json(
                 {error: "Nu s-a putut șterge proiectul"},
                 {status: 500}
@@ -116,7 +147,13 @@ export async function DELETE(
             {status: 200}
         );
     } catch (error) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                section: 'api/projects/[id]/route.ts',
+                action: 'delete',
+            }
+        });
         return NextResponse.json(
             {error: "Eroare internă a serverului"},
             {status: 500}

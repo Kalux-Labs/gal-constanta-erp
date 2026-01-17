@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
 import {beneficiarySchema} from "@/lib/validation/schemas/beneficiary-schema";
 import {requireAuth, validateBody} from "@/lib/server/api/utils";
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST(request: NextRequest) {
     try {
@@ -41,7 +42,6 @@ export async function POST(request: NextRequest) {
                 .limit(1);
 
             if (beneficiaryError) {
-                console.log(beneficiaryError);
                 return NextResponse.json(
                     {error: "Nu s-a putut crea beneficiarul"},
                     {status: 500}
@@ -75,8 +75,14 @@ export async function POST(request: NextRequest) {
             .single();
 
         if (error) {
+            Sentry.captureException(error, {
+                level: 'error',
+                tags: {
+                    section: 'api/beneficiaries/route.ts',
+                    action: 'create'
+                }
+            });
             if (error.code.includes('23505')) {
-                console.log(error);
                 return NextResponse.json(
                     {
                         error: "Un beneficiar cu acest CUI este existent. Pentru orice neînțelegere vă rugăm să ne contactați.",
@@ -93,6 +99,14 @@ export async function POST(request: NextRequest) {
         }
 
         if (!data) {
+            Sentry.captureException(error, {
+                level: 'error',
+                tags: {
+                    section: 'api/beneficiaries/route.ts',
+                    action: 'create',
+                    details: 'dbError - no data'
+                }
+            });
             return NextResponse.json(
                 {error: "Nu s-a putut creea beneficiarul"},
                 {status: 404}
@@ -101,7 +115,13 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json(data, {status: 201});
     } catch (error) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                section: 'api/beneficiaries/route.ts',
+                action: 'create'
+            }
+        });
         return NextResponse.json(
             {error: "Eroare internă a serverului"},
             {status: 500}

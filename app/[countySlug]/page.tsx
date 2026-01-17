@@ -43,7 +43,7 @@ export default async function CountyPage({
     const county = counties.find((c) => c.slug === countySlug);
 
     const {data, count} = await getProjects({
-        page: page, perPage: perPage, search: search, countySlug: countySlug
+        page: page, perPage: perPage, search: search, countySlug: countySlug, allowUnassigned: true
     });
 
     const breadcrumbItems = [

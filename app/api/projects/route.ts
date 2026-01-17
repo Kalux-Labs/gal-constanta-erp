@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
 import {projectSchema} from "@/lib/validation/schemas/project-schema";
 import {requireAuth, validateBody} from "@/lib/server/api/utils";
+import * as Sentry from "@sentry/nextjs";
 
 export async function POST(request: NextRequest) {
     try {
@@ -43,6 +44,14 @@ export async function POST(request: NextRequest) {
             .single();
 
         if (error) {
+            Sentry.captureException(error, {
+                level: 'error',
+                tags: {
+                    section: 'api/projects/route.ts',
+                    action: 'create',
+                    details: 'dbError'
+                }
+            });
             if (error.message.includes('projects_code_key')) {
                 return NextResponse.json(
                     {
@@ -52,7 +61,6 @@ export async function POST(request: NextRequest) {
                     {status: 409}
                 )
             }
-            console.log(error);
             return NextResponse.json(
                 {error: "Nu s-a putut creea proiectul"},
                 {status: 500}
@@ -68,7 +76,13 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json(data, {status: 201});
     } catch (error) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                section: 'api/projects/route.ts',
+                action: 'create'
+            }
+        });
         return NextResponse.json(
             {error: "Eroare internă a serverului"},
             {status: 500}

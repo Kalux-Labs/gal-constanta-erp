@@ -18,6 +18,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {z} from "zod";
 import {toast} from "sonner";
 import FormField from "@/components/forms/form-field";
+import * as Sentry from "@sentry/nextjs";
 
 export function UpdatePasswordForm({className, ...props}: React.ComponentPropsWithoutRef<'div'>) {
     const [isLoading, setIsLoading] = useState(false)
@@ -49,7 +50,13 @@ export function UpdatePasswordForm({className, ...props}: React.ComponentPropsWi
             }
             router.push('/contul-meu');
         } catch (error) {
-            console.error(error);
+            Sentry.captureException(error, {
+                level: 'error',
+                tags: {
+                    component: 'update-password-form.tsx',
+                    action: 'update-password'
+                }
+            });
             toast.error("S-a produs o eroare de sistem, vă rugăm încercați din nou.")
         } finally {
             setIsLoading(false);

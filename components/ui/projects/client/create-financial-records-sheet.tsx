@@ -81,9 +81,7 @@ export default function CreateFinancialRecordSheet({
 
     const handleSubmitClick = async () => {
         const isValid = await form.trigger();
-        console.log(form.formState.errors);
         if (isValid) {
-            console.log(form.getValues());
             await form.handleSubmit(onSubmit)();
         }
     }

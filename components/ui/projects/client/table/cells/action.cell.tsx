@@ -35,7 +35,7 @@ export default function ActionCell({project}: ActionCellProps) {
             async () => {
                 await deleteProject(project.id);
             },
-            `Ești sigur că vrei să ștergi acest proiect "${project.name}"? Această acțiune nu poate fi anulată.`,
+            `Ești sigur că vrei să ștergi acest proiect "${project.name}"?. Pentru statistici, proiectul va ramâne în baza de date.`,
             {
                 actionLabel: "Șterge",
                 cancelLabel: "Anulează",

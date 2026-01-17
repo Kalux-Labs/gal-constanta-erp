@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
 import {updateAccountSchema} from "@/lib/validation/schemas/update-account-schema";
 import {requireAuth, validateBody} from "@/lib/server/api/utils";
+import * as Sentry from "@sentry/nextjs";
 
 export async function PATCH(request: NextRequest) {
     try {
@@ -23,7 +24,14 @@ export async function PATCH(request: NextRequest) {
         });
 
         if (error) {
-            console.error(error);
+            Sentry.captureException(error, {
+                level: 'error',
+                tags: {
+                    section: 'users/route.ts',
+                    action: 'update',
+                    details: 'dbError'
+                }
+            });
             return NextResponse.json({error: "Nu s-a putut actualiza profilul"}, {status: 403});
         }
 
@@ -34,7 +42,13 @@ export async function PATCH(request: NextRequest) {
             {status: 200}
         );
     } catch (error) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                section: 'users/route.ts',
+                action: 'update'
+            }
+        });
         return NextResponse.json(
             {error: "Eroare internă a serverului"},
             {status: 500}

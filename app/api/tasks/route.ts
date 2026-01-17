@@ -7,6 +7,7 @@ import {Task} from "@/lib/types/task";
 import {taskSchema} from "@/lib/validation/schemas/task-schema";
 import {requireAdmin, requireAuth, validateBody} from "@/lib/server/api/utils";
 import {downloadTaskSchema} from "@/lib/validation/schemas/download-task-schema";
+import * as Sentry from "@sentry/nextjs";
 
 export async function GET(request: NextRequest) {
     try {
@@ -45,7 +46,13 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json(data, {status: 200});
     } catch (error) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                section: 'tasks/route.ts',
+                action: 'read'
+            }
+        });
         return NextResponse.json(
             {error: "Eroare internă a serverului"},
             {status: 500}
@@ -86,16 +93,29 @@ export async function POST(request: NextRequest) {
             .select();
 
         if (error) {
-            console.error(error);
+            Sentry.captureException(error, {
+                level: 'error',
+                tags: {
+                    section: 'tasks/route.ts',
+                    action: 'create',
+                    details: 'dbError'
+                }
+            });
             return NextResponse.json(
-                {error: "Cannot create activity"},
+                {error: "Nu s-a putut creea activitatea"},
                 {status: 422}
             );
         }
 
         return NextResponse.json(data[0], {status: 201});
     } catch (error) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                section: 'tasks/route.ts',
+                action: 'create'
+            }
+        });
         return NextResponse.json(
             {error: "Eroare internă a serverului"},
             {status: 500}
@@ -127,7 +147,14 @@ export async function DELETE(request: NextRequest) {
             .select();
 
         if (error) {
-            console.error(error);
+            Sentry.captureException(error, {
+                level: 'error',
+                tags: {
+                    section: 'api/tasks/route.ts',
+                    action: 'delete',
+                    details: 'dbError'
+                }
+            });
             return NextResponse.json(
                 {error: "Nu s-au putut șterge activitățile"},
                 {status: 403}
@@ -135,6 +162,14 @@ export async function DELETE(request: NextRequest) {
         }
 
         if (!data) {
+            Sentry.captureException(error, {
+                level: 'error',
+                tags: {
+                    section: 'api/tasks/route.ts',
+                    action: 'delete',
+                    details: 'dbError - no data'
+                }
+            });
             return NextResponse.json(
                 {error: "Nu s-au putut șterge activitățile"},
                 {status: 404}
@@ -146,7 +181,13 @@ export async function DELETE(request: NextRequest) {
             {status: 200}
         );
     } catch (error) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                section: 'api/tasks/route.ts',
+                action: 'delete'
+            }
+        });
         return NextResponse.json(
             {error: "Eroare internă a serverului"},
             {status: 500}

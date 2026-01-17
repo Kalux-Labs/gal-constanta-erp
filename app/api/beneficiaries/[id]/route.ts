@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from "next/server";
 import {beneficiarySchema} from "@/lib/validation/schemas/beneficiary-schema";
 import {requireAuth, validateBody} from "@/lib/server/api/utils";
+import * as Sentry from "@sentry/nextjs";
 
 export async function PUT(
     request: NextRequest,
@@ -41,6 +42,14 @@ export async function PUT(
             .single();
 
         if (error) {
+            Sentry.captureException(error, {
+                level: 'error',
+                tags: {
+                    section: 'api/beneficiaries/[id]/route.ts',
+                    action: 'create',
+                    details: 'dbError'
+                }
+            });
             return NextResponse.json(
                 {error: "Nu s-a putut actualiza beneficiarul"},
                 {status: 500}
@@ -56,7 +65,13 @@ export async function PUT(
 
         return NextResponse.json(data, {status: 200});
     } catch (error) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                section: 'api/beneficiaries/[id]/route.ts',
+                action: 'create'
+            }
+        });
         return NextResponse.json(
             {error: "Eroare internă a serverului"},
             {status: 500}
@@ -98,6 +113,15 @@ export async function DELETE(
                 .eq("id", id);
 
             if (deleteError) {
+                Sentry.captureException(deleteError, {
+                    level: 'error',
+                    tags: {
+                        section: 'api/beneficiaries/[id]/route.ts',
+                        action: 'delete',
+                        details: 'dbError - deleteError'
+                    }
+                });
+
                 return NextResponse.json(
                     {error: "Nu s-a putut șterge beneficiarul"},
                     {status: 500}
@@ -110,6 +134,14 @@ export async function DELETE(
                 .eq("id", id);
 
             if (updateBeneficiaryError) {
+                Sentry.captureException(updateBeneficiaryError, {
+                    level: 'error',
+                    tags: {
+                        section: 'api/beneficiaries/[id]/route.ts',
+                        action: 'delete',
+                        details: 'dbError - updateBeneficiaryError'
+                    }
+                });
                 return NextResponse.json(
                     {error: "Nu s-a putut șterge beneficiarul"},
                     {status: 500}
@@ -122,6 +154,14 @@ export async function DELETE(
                 .eq("user_id", user.id);
 
             if (updateProjectsError) {
+                Sentry.captureException(updateProjectsError, {
+                    level: 'error',
+                    tags: {
+                        section: 'api/beneficiaries/[id]/route.ts',
+                        action: 'delete',
+                        details: 'dbError - updateProjectsError'
+                    }
+                });
                 return NextResponse.json(
                     {error: "Nu s-au putut actualiza proiectele"},
                     {status: 500}
@@ -134,7 +174,13 @@ export async function DELETE(
             {status: 200}
         );
     } catch (error) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                section: 'api/beneficiaries/[id]/route.ts',
+                action: 'delete',
+            }
+        });
         return NextResponse.json(
             {error: "Eroare internă a serverului"},
             {status: 500}

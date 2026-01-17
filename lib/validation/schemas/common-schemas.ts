@@ -5,31 +5,31 @@ const idSchema = z.number().int().positive();
 const beneficiaryIdNameSchema = z.object({
     id: idSchema,
     name: z.string()
-})
+}).nullable();
 
 const citySchema = z.object({
     id: idSchema,
     county_id: idSchema,
     name: z.string(),
-}).nullable().optional().refine(val => val !== null && val !== undefined, "Orașul este obligatoriu");
+}).nullable();
 
 const countySchema = z.object({
     id: idSchema,
     name: z.string(),
-}).nullable().optional().refine(val => val !== null && val !== undefined, "Județul este obligatoriu");
+}).nullable();
 
 const citySchemaExtended = z.object({
     id: idSchema,
     county_id: idSchema,
     name: z.string(),
     slug: z.string(),
-}).nullable().optional().refine(val => val !== null && val !== undefined, "Orașul este obligatoriu");
+}).nullable();
 
 const countySchemaExtended = z.object({
     id: idSchema,
     name: z.string(),
     slug: z.string(),
-}).nullable().optional().refine(val => val !== null && val !== undefined, "Județul este obligatoriu");
+}).nullable();
 
 const nameSchema = z.string()
     .trim()

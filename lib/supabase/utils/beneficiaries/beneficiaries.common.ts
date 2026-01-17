@@ -6,7 +6,7 @@ export default async function fetchBeneficiaries<T>(
     tableName: string,
     options: QueryOptions,
 ): Promise<QueryResult<T>> {
-    const {page = 1, perPage = 10, search, countySlug, citySlug, countyId, cityId} = options;
+    const {page = 1, perPage = 10, search, countyId, cityId} = options;
 
     const offset = (page - 1) * perPage;
 
@@ -23,12 +23,6 @@ export default async function fetchBeneficiaries<T>(
 
     if (search) {
         query = query.ilike("name", `%${search}%`);
-    }
-    if (countySlug) {
-        query = query.eq("county->>slug", countySlug);
-    }
-    if (citySlug) {
-        query = query.eq("city->>slug", citySlug);
     }
     if (countyId) {
         query = query.eq("county_id", countyId);

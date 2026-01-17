@@ -1,3 +1,5 @@
+import * as Sentry from "@sentry/nextjs";
+
 export const runtime = 'nodejs'
 
 import { NextRequest, NextResponse } from "next/server";
@@ -58,7 +60,13 @@ export async function POST(request: NextRequest) {
             },
         });
     } catch (error) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                section: 'tasks/download/route.ts',
+                action: 'create'
+            }
+        });
         return NextResponse.json(
             { error: "Eroare internă a serverului" },
             { status: 500 }

@@ -19,6 +19,7 @@ import {FormProvider, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import FormField from "@/components/forms/form-field";
 import {toast} from "sonner";
+import * as Sentry from "@sentry/nextjs";
 
 export function LoginForm({className, ...props}: React.ComponentPropsWithoutRef<'div'>) {
     const [isLoading, setIsLoading] = useState(false)
@@ -51,7 +52,13 @@ export function LoginForm({className, ...props}: React.ComponentPropsWithoutRef<
 
             router.push('/contul-meu')
         } catch(error: unknown) {
-            console.error(error);
+            Sentry.captureException(error, {
+                level: 'error',
+                tags: {
+                    component: 'login-form.tsx',
+                    action: 'login'
+                }
+            });
             form.setError("email", {
                 type: 'server',
                 message: 'Credențiale invalide'

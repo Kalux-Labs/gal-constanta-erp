@@ -1,5 +1,6 @@
 import {format} from "date-fns";
 import {ro} from "date-fns/locale";
+import * as Sentry from "@sentry/nextjs";
 
 export const DATE_FORMATS = {
     short: "dd.MM.yyyy",              // 08.01.2026
@@ -30,7 +31,12 @@ export function formatDate(
 
         return format(dateObj, formatStr, {locale: ro});
     } catch (error) {
-        console.error(error);
+        Sentry.captureException(error, {
+            level: 'error',
+            tags: {
+                component: 'date-formats.ts',
+            }
+        });
         return null;
     }
 }

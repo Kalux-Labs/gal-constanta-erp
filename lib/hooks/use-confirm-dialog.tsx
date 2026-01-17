@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import * as Sentry from "@sentry/nextjs";
 
 interface ConfirmConfig {
     title: string;
@@ -48,7 +49,13 @@ export function useConfirmDialog() {
             await onConfirmCallback();
             setOpen(false);
         } catch (error) {
-            console.error(error);
+            Sentry.captureException(error, {
+                level: 'error',
+                tags: {
+                    component: 'use-confirm-dialog.tsx',
+                    action: 'confirm-dialog'
+                }
+            });
         } finally {
             setIsLoading(false);
         }
