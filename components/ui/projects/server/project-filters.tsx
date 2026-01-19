@@ -34,7 +34,7 @@ export default function ProjectFilters({
 
     const formSchema = z.object({
         county: countySchemaExtended,
-        city: citySchemaExtended.nullable(),
+        city: citySchemaExtended.optional(),
         search: z.string().optional(),
     }).refine((data) => data.county !== null, {
         message: "Județul este obligatoriu",

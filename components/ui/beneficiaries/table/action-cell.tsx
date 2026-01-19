@@ -9,20 +9,23 @@ import {
     DropdownMenuItem, DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {Pencil, Trash2, MoreHorizontal} from "lucide-react";
+import {Pencil, Trash2, MoreHorizontal, Mail} from "lucide-react";
 import {useConfirmDialog} from "@/lib/hooks/use-confirm-dialog";
 import {useDeleteBeneficiary} from "@/lib/hooks/beneficiary/use-delete-beneficiary";
 import {useState} from "react";
 import NewBeneficiarySheet from "@/components/ui/beneficiaries/client/new-beneficiary-sheet";
+import {useCreateEmail} from "@/lib/hooks/email/use-create-email";
 
 interface ActionCellProps {
     beneficiary: BeneficiaryPrivate;
+    isAdmin: boolean;
 }
 
-export default function ActionCell({beneficiary}: ActionCellProps) {
+export default function ActionCell({beneficiary, isAdmin}: ActionCellProps) {
     const [editSheetOpen, setEditSheetOpen] = useState(false);
     const {open, config, isLoading, handleConfirm, handleCancel, confirm} = useConfirmDialog();
     const {mutate: deleteBeneficiary} = useDeleteBeneficiary();
+    const {mutate: createEmail} = useCreateEmail();
 
     const handleDeleteClick = () => {
         confirm(
@@ -39,6 +42,10 @@ export default function ActionCell({beneficiary}: ActionCellProps) {
         );
     };
 
+    const handleSendEmailClick = async () => {
+        createEmail(beneficiary);
+    }
+
     return (
         <div className="flex flex-row justify-end">
             <DropdownMenu>
@@ -48,6 +55,18 @@ export default function ActionCell({beneficiary}: ActionCellProps) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
+                    {isAdmin && (
+                        <>
+                            <DropdownMenuItem
+                                onClick={handleSendEmailClick}
+                                className="flex items-center gap-2 cursor-pointer"
+                            >
+                                <Mail className="w-4 h-4"/>
+                                <span>Trimite notificare</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator/>
+                        </>
+                    )}
                     <DropdownMenuItem
                         onClick={() => setEditSheetOpen(true)}
                         className="flex items-center gap-2 cursor-pointer"

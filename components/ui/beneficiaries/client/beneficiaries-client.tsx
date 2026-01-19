@@ -10,9 +10,10 @@ import County from "@/lib/types/county";
 import {useRouter, useSearchParams} from "next/navigation";
 import {InfoIcon} from "lucide-react";
 
-export default function BeneficiariesClient({counties, isAdmin}: {
+export default function BeneficiariesClient({counties, isAdmin, email}: {
     counties: County[];
     isAdmin: boolean;
+    email: string;
 }) {
     const [page, setPage] = useState(1);
     const [perPage] = useState(10);
@@ -54,9 +55,10 @@ export default function BeneficiariesClient({counties, isAdmin}: {
                     }
                     counties={counties}
                     canCreate={canCreate}
+                    email={email}
                 />
             </div>
-            <ClientPaginatedDataTable page={page} perPage={perPage} columns={columns} data={data?.data ?? []}
+            <ClientPaginatedDataTable page={page} perPage={perPage} columns={columns(isAdmin)} data={data?.data ?? []}
                                       total={data?.count ?? 0} isLoading={isLoading}
                                       onPageChangeAction={onPageChangeAction}/>
             <p className="text-xs text-muted-foreground font-regular flex flex-row gap-1 items-center">

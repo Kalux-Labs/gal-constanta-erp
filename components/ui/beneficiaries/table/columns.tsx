@@ -4,7 +4,7 @@ import {ColumnDef} from "@tanstack/react-table";
 import ActionCell from "@/components/ui/beneficiaries/table/action-cell";
 import {BeneficiaryPrivate} from "@/lib/types/beneficiary";
 
-export const columns: ColumnDef<BeneficiaryPrivate>[] = [
+export const columns = (isAdmin: boolean): ColumnDef<BeneficiaryPrivate>[] => [
     {
         accessorKey: 'name',
         header: 'Nume beneficiar',
@@ -30,6 +30,6 @@ export const columns: ColumnDef<BeneficiaryPrivate>[] = [
     {
         id: 'actions',
         header: "",
-        cell: ({row}) => <ActionCell key={row.original.id} beneficiary={row.original}/>
+        cell: ({row}) => <ActionCell key={row.original.id} beneficiary={row.original} isAdmin={isAdmin}/>
     }
 ]

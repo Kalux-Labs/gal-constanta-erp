@@ -20,7 +20,20 @@ const financialRecordSchema = z.object({
                 )
         )
         .min(1, "Trebuie să existe cel puțin o tranșă")
-        .max(10, "Numărul de tranșe nu trebuie să depășească 10"),
+        .max(10, "Numărul de tranșe nu trebuie să depășească 10")
+        .refine(
+            (installments) => {
+                for (let i = 1; i < installments.length; i++) {
+                    if (new Date(installments[i].date) < new Date(installments[i - 1].date)) {
+                        return false;
+                    }
+                }
+                return true;
+            },
+            {
+                message: "Tranșele trebuie să fie în ordine cronologică. Dacă nu există avans, selectați o dată anterioară primei tranșe",
+            }
+        ),
 });
 
 type FinancialRecordFormData = z.infer<typeof financialRecordSchema>;

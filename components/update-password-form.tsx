@@ -19,6 +19,7 @@ import {z} from "zod";
 import {toast} from "sonner";
 import FormField from "@/components/forms/form-field";
 import * as Sentry from "@sentry/nextjs";
+import {AuthApiError} from "@supabase/auth-js";
 
 export function UpdatePasswordForm({className, ...props}: React.ComponentPropsWithoutRef<'div'>) {
     const [isLoading, setIsLoading] = useState(false)
@@ -57,7 +58,24 @@ export function UpdatePasswordForm({className, ...props}: React.ComponentPropsWi
                     action: 'update-password'
                 }
             });
-            toast.error("S-a produs o eroare de sistem, vă rugăm încercați din nou.")
+
+            if (error instanceof AuthApiError) {
+                switch (error.code) {
+                    case 'same_password':
+                        toast.error("Noua parolă nu poate coincide cu o parolă veche.");
+                        break;
+                    case 'validation_error':
+                        toast.error("Parola nu îndeplinește cerințele de siguranță.");
+                        break;
+                    case 'user_not_found':
+                        toast.error("Utilizator negăsit. Vă rugăm să vă autentificați din nou.");
+                        break;
+                    default:
+                        toast.error("S-a produs o eroare de sistem, vă rugăm încercați din nou.");
+                }
+            } else {
+                toast.error("S-a produs o eroare neașteptată, vă rugăm încercați din nou.");
+            }
         } finally {
             setIsLoading(false);
         }

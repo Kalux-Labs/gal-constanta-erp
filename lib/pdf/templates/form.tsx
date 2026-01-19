@@ -261,6 +261,7 @@ export function FormTemplate({data}: FormDocumentProps) {
                                         <Text style={[styles.tableCellCenter, {flex: 2}]}>Data transei</Text>
                                         <Text style={[styles.tableCellCenter, {flex: 1.5}]}>Valoare totală</Text>
                                         <Text style={[styles.tableCellCenter, {flex: 1.5}]}>Ajutor financiar</Text>
+                                        <Text style={[styles.tableCellCenter, {flex: 1.5}]}>Tip</Text>
                                     </View>
 
                                     {lastFinancialRecord.installments.map((installment, installmentIndex) => (
@@ -276,6 +277,9 @@ export function FormTemplate({data}: FormDocumentProps) {
                                             </Text>
                                             <Text style={[styles.tableCellCenter, {flex: 1.5}]}>
                                                 {formatCurrency(installment.total_financial_help)}
+                                            </Text>
+                                            <Text style={[styles.tableCellCenter, {flex: 1.5}]}>
+                                                {installmentIndex == 0 ? 'Avans' : ''}
                                             </Text>
                                         </View>
                                     ))}

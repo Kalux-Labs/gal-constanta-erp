@@ -34,6 +34,7 @@ interface NewBeneficiarySheetProps {
     onOpenChange?: (open: boolean) => void;
     counties?: County[];
     canCreate?: boolean;
+    email?: string;
 }
 
 export default function NewBeneficiarySheet({
@@ -43,6 +44,7 @@ export default function NewBeneficiarySheet({
                                                 onOpenChange: externalOnOpenChange,
                                                 counties: initialCounties,
                                                 canCreate = true,
+                                                email
                                             }: NewBeneficiarySheetProps) {
 
     const [internalOpen, setInternalOpen] = useState(false);
@@ -71,11 +73,11 @@ export default function NewBeneficiarySheet({
         city: beneficiary?.city ?? null,
         street: beneficiary?.street ?? "",
         zipcode: beneficiary?.zipcode?.toString() ?? "",
-        email: beneficiary?.email ?? "",
+        email: beneficiary?.email ?? email ?? "",
         phone: beneficiary?.phone ?? "",
         bank_account: beneficiary?.bank_account ?? "",
         legal_representative: beneficiary?.legal_representative ?? "",
-    }), [beneficiary]);
+    }), [beneficiary, email]);
 
     const form = useForm<BeneficiaryFormData>({
         resolver: zodResolver(beneficiarySchema),
@@ -236,14 +238,14 @@ export default function NewBeneficiarySheet({
                             disabled={isPending  || !canCreate}
                         />
 
-                        <p className="text-muted-foreground text-xs">Câmpuri opționale</p>
-
                         <FormField<BeneficiaryFormData>
                             name="email"
                             label="Email"
                             placeholder="Introduceți adresa de email"
                             type="email"
                             disabled={isPending  || !canCreate}
+                            required
+                            tooltip="Adresa de email către care vom trimite notificări referitoare la stadiul proiectelor dvs."
                         />
                     </form>
                 </FormProvider>

@@ -83,6 +83,10 @@ export default function CreateFinancialRecordSheet({
         const isValid = await form.trigger();
         if (isValid) {
             await form.handleSubmit(onSubmit)();
+        } else {
+            if(form.formState.errors.installments?.root?.message) {
+                toast.error(form.formState.errors.installments.root.message);
+            }
         }
     }
 
@@ -115,11 +119,11 @@ export default function CreateFinancialRecordSheet({
                             eligibilă: {project.total_eligible_financing_amount}</p>
                         {fields.map((field, index) => {
                                 const cardTitle = index == 0 ? `Avans` : `Tranșa ${index}`;
-
+                                const cardDescription = index == 0 && 'Dacă nu există avans, selectați o dată anterioară primei tranșe.';
                                 return (<Card key={field.id} className="shadow-xs py-4 px-4">
                                         <CardHeader className="text-md font-medium px-0">
                                             <CardTitle>{cardTitle}</CardTitle>
-                                            <CardDescription></CardDescription>
+                                            <CardDescription className="font-normal">{cardDescription}</CardDescription>
                                         </CardHeader>
                                         <CardContent className="px-0 grid flex-1 auto-rows-min gap-4">
                                             <FormDateTimePicker

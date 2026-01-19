@@ -1,11 +1,11 @@
 import {z} from "zod";
 import {
     citySchema,
-    countySchema, emailSchema,
+    countySchema,
     nameSchema, phoneSchema,
     streetSchema,
     zipcodeSchema,
-    cuiSchema
+    cuiSchema, emailSchemaRequired
 } from "@/lib/validation/schemas/common-schemas";
 
 const beneficiarySchema = z.object({
@@ -21,7 +21,7 @@ const beneficiarySchema = z.object({
 
     zipcode: zipcodeSchema,
 
-    email: emailSchema,
+    email: emailSchemaRequired,
 
     phone: phoneSchema,
 
