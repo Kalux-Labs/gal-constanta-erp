@@ -33,9 +33,9 @@ const icons = {
 interface ActionItem {
     label: string
     href?: string
-    actionType?: "changePassword" | "deleteAccount" | "openUpdateAccountDialog" | "logout",
+    actionType?: "changePassword" | "deleteAccount" | "openUpdateAccountDialog" | "logout"
     variant?: "default" | "outline" | "destructive" | "secondary"
-    icon?: keyof typeof icons;
+    icon?: keyof typeof icons
 }
 
 interface ActionCardProps {
@@ -43,9 +43,9 @@ interface ActionCardProps {
     description: string
     body: string
     actions: ActionItem[]
-    icon: keyof typeof icons;
-    email?: string;
-    displayName?: string;
+    icon: keyof typeof icons
+    email?: string
+    displayName?: string
 }
 
 export default function ActionsCard({

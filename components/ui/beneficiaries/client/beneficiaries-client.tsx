@@ -36,11 +36,11 @@ export default function BeneficiariesClient({counties, isAdmin, email}: {
     }
 
     useEffect(() => {
-        if (shouldOpen && canCreate) {
+        if (shouldOpen && canCreate && !isLoading ) {
             setOpen(true);
             router.replace("/contul-meu/beneficiari")
         }
-    }, [shouldOpen, router, canCreate]);
+    }, [shouldOpen, router, canCreate, isLoading]);
 
     return (
         <>
@@ -49,7 +49,7 @@ export default function BeneficiariesClient({counties, isAdmin, email}: {
                     open={open}
                     onOpenChange={setOpen}
                     trigger={
-                        <Button disabled={!canCreate}>
+                        <Button disabled={!canCreate || isLoading}>
                             Adaugă un nou beneficiar
                         </Button>
                     }
