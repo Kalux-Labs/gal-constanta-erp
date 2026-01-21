@@ -21,10 +21,6 @@ export function ManualTriggerTemplate({beneficiary, redirectUrl}: ManualTriggerT
                 border: '1px solid #e5e7eb'
             }}
         >
-            <p style={{ color: '#334155', fontSize: '15px', lineHeight: '1.6', marginBottom: '16px' }}>
-                Bună ziua {beneficiary.legal_representative},
-            </p>
-
             <h2
                 style={{
                     color: '#020817',
@@ -36,6 +32,10 @@ export function ManualTriggerTemplate({beneficiary, redirectUrl}: ManualTriggerT
             >
                 Notificare privind tranșele de plată
             </h2>
+
+            <p style={{ color: '#334155', fontSize: '15px', lineHeight: '1.6', marginBottom: '16px' }}>
+                Bună ziua {beneficiary.legal_representative},
+            </p>
 
             <p style={{color: '#334155', fontSize: '15px', lineHeight: '1.6', marginBottom: '16px'}}>
                 Te informăm că există actualizări importante în platforma{' '}

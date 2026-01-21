@@ -54,7 +54,7 @@ export default async function MyAccount() {
                     icon={FolderOpen}
                 />
                 <NavigationCard
-                    title={isAdmin ? "Beneficiari" : "Profil Beneficiar"}
+                    title={isAdmin ? "Beneficiari" : "Profil beneficiar"}
                     description={isAdmin ? "Administrare beneficiari" : "Administrare beneficiar"}
                     body={isAdmin ? "Accesează și gestionează rapid informațiile beneficiarilor pe care îi reprezinți.": "Accesează și gestionează rapid informațiile beneficiarului pe care îl reprezinti."}
                     href="/contul-meu/beneficiari"
