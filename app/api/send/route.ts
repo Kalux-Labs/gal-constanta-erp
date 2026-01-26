@@ -56,7 +56,6 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json(data);
     } catch (error) {
-        console.log(error);
         Sentry.captureException(error, {
             level: 'error',
             tags: {

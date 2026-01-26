@@ -295,6 +295,9 @@ export function FormTemplate({data}: FormDocumentProps) {
                             <Text style={styles.tableCell}>
                                 {formatCurrency(financialTotals.totalHelp)}
                             </Text>
+                            <Text style={styles.tableCell}>
+
+                            </Text>
                         </View>
                     </View>
                 )}

@@ -69,9 +69,10 @@ export function FormCombobox<TFieldValues extends FieldValues, T>({
     const [search, setSearch] = useState("");
 
     const filteredOptions = useMemo(() => {
-        const q = search.toLowerCase();
+        const q = search.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
         return options.filter((o) =>
-            getLabel(o).toLowerCase().includes(q)
+            getLabel(o).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(q)
         );
     }, [options, search, getLabel]);
 
@@ -82,7 +83,8 @@ export function FormCombobox<TFieldValues extends FieldValues, T>({
             render={({field, fieldState}) => (
                 <div className="grid gap-2" hidden={hidden} aria-disabled={disabled}>
                     {label && (
-                        <Label htmlFor={name} className={cn( "flex items-center gap-1", disabled && "pointer-events-none text-muted-foreground" )}>
+                        <Label htmlFor={name}
+                               className={cn("flex items-center gap-1", disabled && "pointer-events-none text-muted-foreground")}>
                             {label}
                             {required && <span className="text-red-500">*</span>}
                             {tooltip && (
@@ -119,7 +121,7 @@ export function FormCombobox<TFieldValues extends FieldValues, T>({
                         </PopoverTrigger>
 
                         <PopoverContent className="p-0 w-full" align="start" side="bottom" avoidCollisions={false}>
-                            <Command>
+                            <Command shouldFilter={false}>
                                 <CommandInput
                                     placeholder={searchPlaceholder}
                                     className="h-9"

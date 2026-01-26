@@ -143,6 +143,10 @@ const TaskItem: React.FC<{ task: SupabaseTask; isChild?: boolean }> = ({task, is
                 </Text>
             )}
 
+            <Text style={styles.taskDates}>
+                Status: {task.done ? "Finalizat": "In progres"}
+            </Text>
+
             {task.children && task.children.length > 0 && (
                 <View style={styles.childrenContainer}>
                     {task.children.map((child) => (
@@ -168,7 +172,7 @@ export function TasksPDFTemplate ({year, quarterData}: TasksPDFTemplateProps) {
         <Document>
             <Page size="A4" style={styles.page}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>Raport de activitate {year}</Text>
+                    <Text style={styles.title}>RAPORT DE ACTIVITATE {year}</Text>
                     <Text style={styles.subtitle}>
                         Generat la: {new Date().toLocaleDateString('ro-RO', {
                         day: '2-digit',
