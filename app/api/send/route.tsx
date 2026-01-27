@@ -5,6 +5,7 @@ import {requireAdmin, validateBody} from "@/lib/server/api/utils";
 import * as Sentry from "@sentry/nextjs";
 import {z} from "zod";
 import {emailSchemaRequired, nameSchema} from "@/lib/validation/schemas/common-schemas";
+import React from "react";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest) {
             from: 'Asociatia GAL Constanta Centru <contact@asociatiagalconstantacentru.ro>',
             to: [validatedData.email],
             subject: 'Notificare privind tranșele de plată',
-            react: ManualTriggerTemplate({
+            react: React.createElement(ManualTriggerTemplate, {
                 beneficiary: validatedData,
                 redirectUrl: `${origin}/contul-meu`
             })
