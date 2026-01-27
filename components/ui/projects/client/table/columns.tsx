@@ -57,7 +57,7 @@ export const columns: ColumnDef<ProjectPrivate>[] = [
     {
         accessorFn: (row) => row.implementation_city?.name,
         id: 'implementation_city',
-        header: 'Oraș',
+        header: 'Localitate',
     },
     {
         id: 'actions',

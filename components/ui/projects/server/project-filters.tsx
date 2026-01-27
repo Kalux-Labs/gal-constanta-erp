@@ -94,7 +94,7 @@ export default function ProjectFilters({
                     />
                     <FormCombobox<FormData, City>
                         name={"city"}
-                        label="Oraș"
+                        label="Localitate"
                         options={cities}
                         getId={(c) => c.id}
                         getLabel={(c) => c.name}

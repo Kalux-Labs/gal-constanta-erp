@@ -187,9 +187,9 @@ export default function NewBeneficiarySheet({
 
                         <FormCombobox<BeneficiaryFormData, City>
                             name="city"
-                            label="Oraș"
-                            placeholder={!watchedCounty ? "Selectați mai întâi județul" : "Selectați orașul"}
-                            searchPlaceholder="Căutați orașul..."
+                            label="Localitate"
+                            placeholder={!watchedCounty ? "Selectați mai întâi județul" : "Selectați localitatea"}
+                            searchPlaceholder="Căutați localitatea..."
                             options={cities}
                             disabled={!watchedCounty || citiesLoading || isPending  || !canCreate}
                             required

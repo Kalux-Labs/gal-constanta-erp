@@ -21,7 +21,7 @@ export const columns = (isAdmin: boolean): ColumnDef<BeneficiaryPrivate>[] => [
     {
         accessorFn: (row) => row.city?.name,
         id: 'city',
-        header: 'Oraș',
+        header: 'Localitate',
     },
     {
         accessorKey: 'legal_representative',

@@ -90,9 +90,9 @@ export default function TableFilters({
                 />
                 <FormCombobox<FormData, City>
                     name="city"
-                    label="Oraș"
-                    placeholder={!watchedCounty ? "Selectați întâi județul" : "Selectați orașul"}
-                    searchPlaceholder="Căutați orașul..."
+                    label="Localitate"
+                    placeholder={!watchedCounty ? "Selectați întâi județul" : "Selectați localitatea"}
+                    searchPlaceholder="Căutați localitatea..."
                     options={cities}
                     getId={(c) => c.id}
                     getLabel={(c) => c.name}

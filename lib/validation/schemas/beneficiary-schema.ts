@@ -38,7 +38,7 @@ const beneficiarySchema = z.object({
     message: "Județul este obligatoriu",
     path: ["county"]
 }).refine((data) => data.city !== null, {
-    message: "Orașul este obligatoriu",
+    message: "Localitatea este obligatorie",
     path: ["city"]
 });
 

@@ -39,7 +39,7 @@ const projectSchema = z.object({
     if (data.implementation_city === null) {
         ctx.addIssue({
             code: 'custom',
-            message: "Orașul este obligatoriu",
+            message: "Localitatea este obligatorie",
             path: ["implementation_city"],
         });
     }

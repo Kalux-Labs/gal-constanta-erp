@@ -34,7 +34,7 @@ export default function ProjectsSummaryChart({
                 <div className="flex flex-col gap-2">
                     <CardTitle className="text-xl flex items-center gap-2">
                         <TrendingUp className="w-5 h-5 text-primary" />
-                        Rezumatul proiectelor pe orașe
+                        Rezumatul proiectelor pe localități
                     </CardTitle>
                     <CardDescription className="text-base">
                         Distribuția proiectelor ordonate după numărul total

@@ -130,7 +130,7 @@ export async function DELETE(
         } else {
             const {error: updateBeneficiaryError} = await supabase
                 .from("beneficiaries")
-                .update({user_id: null})
+                .update({user_id: null, deleted_at: new Date().toISOString()})
                 .eq("id", id);
 
             if (updateBeneficiaryError) {
