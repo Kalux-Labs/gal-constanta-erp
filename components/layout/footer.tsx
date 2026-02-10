@@ -6,6 +6,7 @@ import {CONSTANTS} from "@/lib/utils/constants";
 import fundedByEu from "@/public/funded_by_eu.svg";
 import logoWText from "@/public/logo_w_text.svg";
 import pnrr from "@/public/pnrr.svg";
+import gov from "@/public/guvern_romania.svg";
 import Image from "next/image";
 
 export default function Footer() {
@@ -43,32 +44,7 @@ export default function Footer() {
                         </Link>
                         .
                     </p>
-                    <div className="mt-5 flex flex-col md:flex-row gap-4 items-start">
-                        <Image
-                            src={fundedByEu}
-                            alt={"Funded by European Union"}
-                            width={80}
-                            height={80}
-                            priority={false}
-                            className="rounded-md h-20 w-auto pointer-events-none select-none"
-                        />
-                        <Image
-                            src={pnrr}
-                            alt={"Logo PNRR"}
-                            width={80}
-                            height={80}
-                            priority={false}
-                            className="rounded-md h-20 w-auto pointer-events-none select-none"
-                        />
-                        <Image
-                            src={logoWText}
-                            alt={"Logo Grup de actiune locala Constanta Centru"}
-                            width={80}
-                            height={80}
-                            priority={false}
-                            className="rounded-md h-20 w-auto pointer-events-none select-none"
-                        />
-                    </div>
+
                 </div>
 
                 <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 order-2 md:order-3">
@@ -103,6 +79,44 @@ export default function Footer() {
                     ))}
                 </div>
             </div>
+
+            <div className="max-w-4xl mx-auto px-4">
+                <div className="flex flex-wrap gap-4 justify-center sm:justify-start items-center">
+                    <Image
+                        src={gov}
+                        alt={"Guvernul Romaniei"}
+                        width={127}
+                        height={40}
+                        priority={false}
+                        className="h-16 w-auto object-contain rounded-md"
+                    />
+                    <Image
+                        src={fundedByEu}
+                        alt={"Funded by European Union"}
+                        width={127}
+                        height={40}
+                        priority={false}
+                        className="h-16 w-auto object-contain rounded-md"
+                    />
+                    <Image
+                        src={pnrr}
+                        alt={"Logo PNRR"}
+                        width={127}
+                        height={40}
+                        priority={false}
+                        className="h-16 w-auto object-contain rounded-md"
+                    />
+                    <Image
+                        src={logoWText}
+                        alt={"Logo Grup de actiune locala Constanta Centru"}
+                        width={127}
+                        height={40}
+                        priority={false}
+                        className="h-16 w-auto object-contain rounded-md"
+                    />
+                </div>
+            </div>
+
             <div
                 className="h-14 w-full bg-repeat-x"
                 style={{
