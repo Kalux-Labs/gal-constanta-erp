@@ -36,7 +36,7 @@ export default function BeneficiariesClient({counties, isAdmin, email}: {
     }
 
     useEffect(() => {
-        if (shouldOpen && canCreate && !isLoading ) {
+        if (shouldOpen && canCreate && !isLoading) {
             setOpen(true);
             router.replace("/contul-meu/beneficiari")
         }
@@ -61,10 +61,12 @@ export default function BeneficiariesClient({counties, isAdmin, email}: {
             <ClientPaginatedDataTable page={page} perPage={perPage} columns={columns(isAdmin)} data={data?.data ?? []}
                                       total={data?.count ?? 0} isLoading={isLoading}
                                       onPageChangeAction={onPageChangeAction}/>
-            <p className="text-xs text-muted-foreground font-regular flex flex-row gap-1 items-center">
-                <InfoIcon className="h-3 w-3"/>
-                Poți avea un singur beneficiar asociat.
-            </p>
+            {!isAdmin && (
+                <p className="text-xs text-muted-foreground font-regular flex flex-row gap-1 items-center">
+                    <InfoIcon className="h-3 w-3"/>
+                    Poți avea un singur beneficiar asociat.
+                </p>
+            )}
         </>
     );
 }

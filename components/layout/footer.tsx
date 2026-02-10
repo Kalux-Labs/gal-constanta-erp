@@ -3,8 +3,9 @@ import {navItems} from "@/lib/utils/nav-items";
 import {Separator} from "@/components/ui/separator";
 import {CONSTANTS} from "@/lib/utils/constants";
 
-import europe from "@/public/europe.svg";
-import gov from "@/public/gov.svg";
+import fundedByEu from "@/public/funded_by_eu.svg";
+import logoWText from "@/public/logo_w_text.svg";
+import pnrr from "@/public/pnrr.svg";
 import Image from "next/image";
 
 export default function Footer() {
@@ -42,18 +43,26 @@ export default function Footer() {
                         </Link>
                         .
                     </p>
-                    <div className="mt-5 flex flex-col sm:flex-row gap-4 items-start">
+                    <div className="mt-5 flex flex-col md:flex-row gap-4 items-start">
                         <Image
-                            src={europe}
-                            alt={"europe"}
+                            src={fundedByEu}
+                            alt={"Funded by European Union"}
                             width={80}
                             height={80}
                             priority={false}
                             className="rounded-md h-20 w-auto pointer-events-none select-none"
                         />
                         <Image
-                            src={gov}
-                            alt={"gov"}
+                            src={pnrr}
+                            alt={"Logo PNRR"}
+                            width={80}
+                            height={80}
+                            priority={false}
+                            className="rounded-md h-20 w-auto pointer-events-none select-none"
+                        />
+                        <Image
+                            src={logoWText}
+                            alt={"Logo Grup de actiune locala Constanta Centru"}
                             width={80}
                             height={80}
                             priority={false}
