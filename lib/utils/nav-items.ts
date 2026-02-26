@@ -1,4 +1,4 @@
-import {Book, Handshake, LucideIcon} from "lucide-react";
+import {Book, Cookie, Handshake, LucideIcon} from "lucide-react";
 
 export type NavItem = {
     href: string;
@@ -39,6 +39,11 @@ export const navItems: NavItem[] = [
                 href: "/politica-de-confidentialitate",
                 label: "Politică de confidențialitate",
                 icon: Handshake
+            },
+            {
+                href: "/politica-cookies",
+                label: "Politică cookies",
+                icon: Cookie
             },
             {
                 href: "/ghid",

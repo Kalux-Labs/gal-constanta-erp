@@ -125,33 +125,34 @@
     }
 
     .terms-page,
-    .privacy-page {
+    .privacy-page,
+    .cookies-page {
         h1 {
-            @apply text-3xl font-bold mb-6 text-gray-900;
+            @apply text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100;
         }
 
         h2 {
-            @apply text-2xl font-semibold mt-10 mb-4 text-gray-800;
+            @apply text-2xl font-semibold mt-10 mb-4 text-gray-800 dark:text-gray-200;
         }
 
         h3 {
-            @apply text-xl font-semibold mt-8 mb-3 text-gray-800;
+            @apply text-xl font-semibold mt-8 mb-3 text-gray-800 dark:text-gray-200;
         }
 
         h4 {
-            @apply text-lg font-medium mt-6 mb-2 text-gray-700;
+            @apply text-lg font-medium mt-6 mb-2 text-gray-700 dark:text-gray-300;
         }
 
         p {
-            @apply text-base leading-relaxed mb-4 text-gray-700;
+            @apply text-base leading-relaxed mb-4 text-gray-700 dark:text-gray-300;
         }
 
         ul {
-            @apply list-disc pl-6 mb-4 space-y-1 text-gray-700;
+            @apply list-disc pl-6 mb-4 space-y-1 text-gray-700 dark:text-gray-300;
         }
 
         ol {
-            @apply list-decimal pl-6 mb-4 space-y-1 text-gray-700;
+            @apply list-decimal pl-6 mb-4 space-y-1 text-gray-700 dark:text-gray-300;
         }
 
         li {
@@ -159,43 +160,43 @@
         }
 
         a {
-            @apply text-blue-600 underline hover:text-blue-800;
+            @apply text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300;
         }
 
         blockquote {
-            @apply border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-4;
+            @apply border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-4 dark:border-gray-600 dark:text-gray-400;
         }
 
         strong {
-            @apply font-semibold text-gray-900;
+            @apply font-semibold text-gray-900 dark:text-gray-100;
         }
 
         em {
-            @apply italic text-gray-700;
+            @apply italic text-gray-700 dark:text-gray-300;
         }
 
         hr {
-            @apply my-6 border-t border-gray-300;
+            @apply my-6 border-t border-gray-300 dark:border-gray-700;
         }
 
         table {
-            @apply w-full border border-gray-300 border-collapse mb-6;
+            @apply w-full border border-gray-300 border-collapse mb-6 dark:border-gray-700;
         }
 
         th {
-            @apply bg-gray-100 border border-gray-300 px-3 py-2 text-left font-semibold;
+            @apply bg-gray-100 border border-gray-300 px-3 py-2 text-left font-semibold dark:bg-gray-800 dark:border-gray-700 dark:text-gray-200;
         }
 
         td {
-            @apply border border-gray-300 px-3 py-2;
+            @apply border border-gray-300 px-3 py-2 dark:border-gray-700 dark:text-gray-300;
         }
 
         code {
-            @apply bg-gray-100 px-1 py-0.5 rounded text-sm font-mono text-gray-800;
+            @apply bg-gray-100 px-1 py-0.5 rounded text-sm font-mono text-gray-800 dark:bg-gray-800 dark:text-gray-200;
         }
 
         pre {
-            @apply bg-gray-100 p-4 rounded text-sm font-mono overflow-x-auto;
+            @apply bg-gray-100 p-4 rounded text-sm font-mono overflow-x-auto dark:bg-gray-800 dark:text-gray-200;
         }
     }
 }
